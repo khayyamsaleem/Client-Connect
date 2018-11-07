@@ -1,0 +1,19 @@
+{
+  "name": "cs554-final-proj",
+  "version": "1.0.0",
+  "description": "CS554 Final Project for Team 200",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/khayyamsaleem/cs554-final-proj.git"
+  },
+  "author": "Khayyam Saleem",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/khayyamsaleem/cs554-final-proj/issues"
+  },
+  "homepage": "https://github.com/khayyamsaleem/cs554-final-proj#readme"
+}
