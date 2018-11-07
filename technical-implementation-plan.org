@@ -1,0 +1,14 @@
+#+TITLE: CS554 Final Project Technical Implementation Plan
+#+SUBTITLE: Team 200 (Because we're OK)
+#+AUTHOR: Khayyam Saleem, Maxwell Melo, Michael Iacona, Annie Topoleski
+#+OPTIONS: toc:nil num:nil
+#+LaTeX_HEADER: \usepackage[1.0in]{geometry}
+
+* General Overview + Vision
+* Course Technologies
+** React
+** Redis
+** Webpack
+* Independently Selected Technologies
+** MongoDB
+** Docker
