@@ -1,14 +1,25 @@
-#+TITLE: CS554 Final Project Technical Implementation Plan
-#+SUBTITLE: Team 200 (Because we're OK)
-#+AUTHOR: Khayyam Saleem, Maxwell Melo, Michael Iacona, Annie Topoleski
-#+OPTIONS: toc:nil num:nil
+#+TITLE: CS554 F18 Final Project: *Client Connect*
+#+STARTUP: showall
+#+SUBTITLE: Team 200 /(because we're OK)/
+#+OPTIONS: toc:nil num:nil author:nil
 #+LaTeX_HEADER: \usepackage[1.0in]{geometry}
 
+* Team
+#+ATTR_LaTeX: :center nil
+| Khayyam Saleem  | 10408112 |
+| Annie Topoleski | 10409355 |
+| Michael Iacona  | 10407612 |
+| Maxwell Melo    | 10408126 |
 * General Overview + Vision
+For our project, we'd like to make a platform for clients to connect with freelancers to help them complete short-term projects based on location and skill requirements. This project can be likened to the job or gig posting section on Craigslist, with a few modifications for a clearer UX and UI. The major components of the project are detailed below:
+- *Login*: The authentication system for our project will be associated with this component. Users will be categorized as either clients or freelancers, and depending on what kind they are, a different view of the platform will be exposed to them.
+- *Profile*: Each user will have a profile view. For clients, they will be able to  create a "Project" and describe the work associated with it, and what skills they are looking for in a freelancer to take on their project(s). They can also add a list of milestones that they would like their freelancer to cross off as they work through the project. For a freelancer, this profile view will have a place where they can add their credentials and render a list of the projects they've taken on, as well as their completion status.
+- *Search List*: Based on client location and some radius that they restrict themselves to, they can render a list of all nearby freelancers that meet their criteria. They can then browse the profiles of these freelancers.
+- *Chat*: If a client wishes to speak to a freelancer about their qualifications and maintain communication throughout the project, they may do it through this chat component. This will be a simple, one-on-one chat from client to freelancer, only initiatable by a client.
 * Course Technologies
-** React
-** Redis
-** Webpack
+- *React*: All front-end components of the application.
+- *Redis*: Maintaining a record of the most recent chats from the database.
+- *Socket.io*: The chat component between clients and freelancers.
 * Independently Selected Technologies
-** MongoDB
-** Docker
+- *MongoDB*: A NoSQL, document-based database. Will be used to store all client and freelancer data for the platform, auth information, profile fields, and chat history.
+- *Docker*: Will be used to deploy the project onto a website.

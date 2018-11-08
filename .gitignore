@@ -473,3 +473,5 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/vim,node,emacs,latex,linux,macos,windows
+*.pdf
+*.tex
