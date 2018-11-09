@@ -21,5 +21,5 @@ For our project, we'd like to make a platform for clients to connect with freela
 - *Redis*: Maintaining a record of the most recent chats from the database.
 - *Socket.io*: The chat component between clients and freelancers.
 * Independently Selected Technologies
-- *MongoDB*: A NoSQL, document-based database. Will be used to store all client and freelancer data for the platform, auth information, profile fields, and chat history.
+- *Semantic UI*: A React component library for our front-end; will be used to make our different views have an appealing UI.
 - *Docker*: Will be used to deploy the project onto a website.
