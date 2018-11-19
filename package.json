@@ -1,26 +1,27 @@
 {
-  "name": "cs554-final-proj",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3",
-    "react-scripts": "2.1.1",
-    "semantic-ui-react": "^0.83.0"
-  },
-  "scripts": {
-    "start": "NODE_PATH=src react-scripts start",
-    "build": "NODE_PATH=src react-scripts build",
-    "test": "NODE_PATH=src react-scripts test",
-    "eject": "NODE_PATH=src react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+    "name": "client-connect-cs554",
+    "version": "1.0.0",
+    "description": "An application to connect freelance workers with clients",
+    "repository": "https://github.com/khayyamsaleem/cs554-final-proj",
+    "author": "ksaleem@stevens.edu",
+    "license": "MIT",
+    "dependencies": {
+        "isomorphic-unfetch": "^3.0.0",
+        "next": "^7.0.2",
+        "next-images": "^1.0.1",
+        "node-redis": "^0.1.7",
+        "react": "^16.6.3",
+        "react-dom": "^16.6.3",
+        "semantic-ui-react": "^0.83.0",
+        "socket.io": "^2.1.1",
+        "socket.io-client": "^2.1.1"
+    },
+    "scripts": {
+        "dev": "next",
+        "build": "next build",
+        "start": "next start"
+    },
+    "devDependencies": {
+        "babel-plugin-root-import": "^6.1.0"
+    }
 }
