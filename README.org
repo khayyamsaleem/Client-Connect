@@ -2,6 +2,7 @@
 #+OPTIONS: toc:nil num:nil
 #+STARTUP: noindent showall
 
+#+ATTR_HTML: :width 150px
 [[./assets/ClientConnectLogo.svg]]
 
 * Group Members
