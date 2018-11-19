@@ -5,8 +5,14 @@
     "repository": "https://github.com/khayyamsaleem/cs554-final-proj",
     "author": "ksaleem@stevens.edu",
     "license": "MIT",
+    "scripts": {
+        "start": "nodemon server/index.js"
+    },
     "dependencies": {
+        "body-parser": "^1.18.3",
+        "express": "^4.16.4",
         "isomorphic-unfetch": "^3.0.0",
+        "mongoose": "^5.3.12",
         "next": "^7.0.2",
         "next-images": "^1.0.1",
         "node-redis": "^0.1.7",
@@ -15,11 +21,6 @@
         "semantic-ui-react": "^0.83.0",
         "socket.io": "^2.1.1",
         "socket.io-client": "^2.1.1"
-    },
-    "scripts": {
-        "dev": "next",
-        "build": "next build",
-        "start": "next start"
     },
     "devDependencies": {
         "babel-plugin-root-import": "^6.1.0"
