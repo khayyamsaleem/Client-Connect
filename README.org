@@ -2,6 +2,8 @@
 #+OPTIONS: toc:nil num:nil
 #+STARTUP: noindent showall
 
+[[./assets/ClientConnectLogo.svg]]
+
 * Group Members
 - Khayyam Saleem, Michael Iacona, Maxwell Melo, Annie Topoleski
 
