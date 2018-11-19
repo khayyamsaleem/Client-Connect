@@ -1,0 +1,50 @@
+#+TITLE: Approaches to Required Components
+#+STARTUP: noindent showall
+#+OPTIONS: toc:nil num:nil
+
+As you're building out your component of choice, add links to tutorials and your overall strategy here so that if anyone needs to help you out, they have some point of reference.
+
+
+* Chat
+- Requirements: React, socket.io, semantic-ui-react, redis, MongoDB, express
+- Tutorial linked [[https://itnext.io/building-a-node-js-websocket-chat-app-with-socket-io-and-react-473a0686d1e1][here]]
+- Approach:
+  1) Follow tutorial
+  2) Use semantic-ui for rendering
+  3) Store rest of chats in MongoDB database
+  4) Use redis to cache most recent messages
+
+* Register, Login
+- Requirements: React, express, bcyrpt, MongoDB, semantic-ui-react
+- Tutorial linked [[https://github.com/kouohhashi/react_mongo_accounts][here]]
+- Approach:
+  1) Write front-end for Registration form (semantic-ui forms)
+     - Should be able to select (radio) *client* or *freelancer*
+     - Based on which one was selected, render different fields
+       - Client-specific: Project details, required skills
+       - Freelancer-specific: possessed skills
+       - both: add location with some geolocation API, propic
+     - set username and password
+  2) Write back-end for Registration form
+     - *Action Item*: Agree on schema
+     - only add _hashed_ password
+  3) Write Log-in form
+     - Submit form to express back-end to verify
+     - Render appropriate page based on user-type
+
+* Search List
+- Requirements: some geolocation API, React, Express, MongoDB, semantic-ui-react
+- Tutorial: wing it, just fetch from DB based on location
+- Approach:
+  1) Write front-end for list rendering (React)
+  2) Make it not available for freelancers
+  2) Have client fetch list based on client location and search radius from some db route in server
+  3) On-click, take client to profile page for freelancer
+
+* Profile
+- Requirements: React, semantic-ui-react, Express, MongoDB
+- Tutorial: wing it, draw a picture of all the nested components
+- Approach:
+  1) Start with front-end, sketch out locations for the chat component, Profile info, etc
+  2) Render different Profile view depending on whether user is a Client or a Freelancer
+  3) Rest easy, probably easiest component, assuming backend has been written well
