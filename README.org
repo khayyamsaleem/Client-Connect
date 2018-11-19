@@ -1,4 +1,4 @@
-#+TITLE: CS554 Final Project: <Name>
+#+TITLE: CS554 Final Project: Client Connect
 
 * Group Members
 - Khayyam Saleem, Michael Iacona, Maxwell Melo, Annie Topoleski
