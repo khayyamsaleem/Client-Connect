@@ -1,19 +1,26 @@
 {
   "name": "cs554-final-proj",
-  "version": "1.0.0",
-  "description": "CS554 Final Project for Team 200",
-  "main": "index.js",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-scripts": "2.1.1",
+    "semantic-ui-react": "^0.83.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "NODE_PATH=src react-scripts start",
+    "build": "NODE_PATH=src react-scripts build",
+    "test": "NODE_PATH=src react-scripts test",
+    "eject": "NODE_PATH=src react-scripts eject"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/khayyamsaleem/cs554-final-proj.git"
+  "eslintConfig": {
+    "extends": "react-app"
   },
-  "author": "Khayyam Saleem",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/khayyamsaleem/cs554-final-proj/issues"
-  },
-  "homepage": "https://github.com/khayyamsaleem/cs554-final-proj#readme"
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
