@@ -2,7 +2,7 @@
 #+OPTIONS: toc:nil num:nil
 #+STARTUP: noindent showall
 
-#+html: <p align="center"><img src="./assets/ClientConnectLogo.svg" width="400px" /></p>
+#+html: <p><img src="./assets/ClientConnectLogo.svg" width="400px" /></p>
 
 * Group Members
 - Khayyam Saleem, Michael Iacona, Maxwell Melo, Annie Topoleski
