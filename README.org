@@ -20,8 +20,8 @@
     git checkout <name>-<feature> # e.g. ham-chat-client
     yarn start
   #+END_SRC
-- To work on backend, work in server directory, and test with Postman or curl or httpie before implementing into react front-end
-- To work on frontend, implement components in ~components~ directory and create pages in ~pages~ directory. Use `~` for absolute imports. Follow the example of the ~Login~ component and ~Login~ page. Not each component needs to have its own page. Communicate with the backend using ~isomorphic-unfetch~. Refer to ~docs/strats.org~ or Khayyam Saleem for questions or pair-programming requests.
+- To work on backend, work in ~server~ directory. Self-explanatory configuration, mostly 546-level express and mongo. Test your routes with Postman or curl or httpie before implementing into react frontend. NO FRONTEND SHOULD BE PRODUCED IN THE ~server~ FOLDER. Only JSON responses, with ~res.json~.
+- To work on frontend, implement components in ~components~ directory and create pages in ~pages~ directory. Prefix imports with ~~~ for absolute imports. Follow the example of the ~Login~ component and ~Login~ page. Not each component needs to have its own page. Communicate with the backend using ~isomorphic-unfetch~. Refer to ~docs/strats.org~ or Khayyam Saleem for questions or pair-programming requests.
 
 * Stack
 - mongo, express, react (Next.js), node *(MERN)*
