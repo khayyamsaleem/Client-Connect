@@ -6,14 +6,20 @@
 - Khayyam Saleem, Michael Iacona, Maxwell Melo, Annie Topoleski
 
 * Development Instructions
-- Create a .env file. For non-prod, you can just rename ~.env.sample~ to ~.env~
-- Ensure that you have ~nodemon~, ~yarn~, and ~mongod~ installed
+- Clone the repository:
+  #+BEGIN_SRC bash
+    git clone https://github.com/khayyamsaleem/cs554-final-proj
+    cd cs554-final-proj
+  #+END_SRC
+- Create a .env file. For non-prod environments, you can just rename ~.env.sample~ to ~.env~ to get started.
+- Ensure that you have ~nodemon~, ~yarn~, and ~mongod~ installed on your machine.
+  - Ensure that your machine is not a Windows machine. If it is, fix the ~package.json~ yourself to make stuff work, or use ~Bash on Ubuntu on Windows~.
 - Run these commands:
-    #+BEGIN_SRC bash
+  #+BEGIN_SRC bash
     yarn install
     git checkout <name>-<feature> # e.g. ham-chat-client
     yarn start
-    #+END_SRC
+  #+END_SRC
 - To work on backend, work in server directory, and test with Postman or curl or httpie before implementing into react front-end
 - To work on frontend, implement components in ~components~ directory and create pages in ~pages~ directory. Use `~` for absolute imports. Follow the example of the ~Login~ component and ~Login~ page. Not each component needs to have its own page. Communicate with the backend using ~isomorphic-unfetch~. Refer to ~docs/strats.org~ or Khayyam Saleem for questions or pair-programming requests.
 
