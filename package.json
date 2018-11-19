@@ -6,11 +6,17 @@
     "author": "ksaleem@stevens.edu",
     "license": "MIT",
     "scripts": {
-        "start": "nodemon server/index.js"
+        "prestart": "mongod --dbpath data --fork --logpath /dev/null",
+        "start": "nodemon server/index.js",
+        "poststart": "mongo admin --eval \"db.shutdownServer()\" > /dev/null",
+        "build": "next build"
     },
     "dependencies": {
         "body-parser": "^1.18.3",
+        "connect-mongo": "^2.0.1",
+        "dotenv": "^6.1.0",
         "express": "^4.16.4",
+        "express-session": "^1.15.6",
         "isomorphic-unfetch": "^3.0.0",
         "mongoose": "^5.3.12",
         "next": "^7.0.2",
@@ -20,7 +26,9 @@
         "react-dom": "^16.6.3",
         "semantic-ui-react": "^0.83.0",
         "socket.io": "^2.1.1",
-        "socket.io-client": "^2.1.1"
+        "socket.io-client": "^2.1.1",
+        "webpack": "^3.0.0",
+        "winston": "^3.1.0"
     },
     "devDependencies": {
         "babel-plugin-root-import": "^6.1.0"

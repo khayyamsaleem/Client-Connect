@@ -31,6 +31,10 @@ As you're building out your component of choice, add links to tutorials and your
   3) Write Log-in form
      - Submit form to express back-end to verify
      - Render appropriate page based on user-type
+- TODO
+  1) Write Registration form
+  2) Connect React form to backend (add users)
+  3) Custom redirect based on userType
 
 * Search List
 - Requirements: some geolocation API, React, Express, MongoDB, semantic-ui-react

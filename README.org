@@ -1,4 +1,24 @@
 #+TITLE: CS554 Final Project: Client Connect
+#+OPTIONS: toc:nil num:nil
+#+STARTUP: noindent showall
 
 * Group Members
 - Khayyam Saleem, Michael Iacona, Maxwell Melo, Annie Topoleski
+
+* Development Instructions
+- Create a .env file. For non-prod, you can just rename ~.env.sample~ to ~.env~
+- Ensure that you have ~nodemon~, ~yarn~, and ~mongod~ installed
+- Run these commands:
+    #+BEGIN_SRC bash
+    yarn install
+    git checkout <name>-<feature> # e.g. ham-chat-client
+    yarn start
+    #+END_SRC
+
+* Stack
+- mongo, express, react (Next.js), node *(MERN)*
+- socket.io for messaging
+- redis for chat caching
+- mongoose for schema definition
+- Semantic UI for rendering
+- winston for logging
