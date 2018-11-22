@@ -6,9 +6,7 @@
     "author": "ksaleem@stevens.edu",
     "license": "MIT",
     "scripts": {
-        "prestart": "mongod --dbpath data --fork --logpath /dev/null",
-        "start": "nodemon server/index.js",
-        "poststart": "mongo admin --eval \"db.shutdownServer()\" > /dev/null",
+        "dev:start": "nodemon server/index.js",
         "build": "next build"
     },
     "dependencies": {
@@ -22,6 +20,7 @@
         "next": "^7.0.2",
         "next-images": "^1.0.1",
         "node-redis": "^0.1.7",
+        "nodemon": "^1.18.6",
         "react": "^16.6.3",
         "react-dom": "^16.6.3",
         "semantic-ui-react": "^0.83.0",

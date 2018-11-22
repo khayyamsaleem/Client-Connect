@@ -1,0 +1,21 @@
+version: "2"
+services:
+    app:
+        container_name: client-connect
+        restart: always
+        build: .
+        ports:
+            - "${PORT}:5000"
+        links:
+            - mongo
+            - redis
+    mongo:
+        container_name: mongo
+        image: mongo
+        ports:
+            - "27017:27017"
+    redis:
+        container_name: redis
+        image: redis
+        ports:
+            - "6379:6379"
