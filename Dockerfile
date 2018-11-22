@@ -2,8 +2,9 @@ FROM node:alpine
 
 WORKDIR /app
 
-add . /app
+ADD . /app
 
-RUN yarn install
+RUN yarn
+RUN yarn global add nodemon
 
 CMD ["yarn", "dev:start"]
