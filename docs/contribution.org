@@ -1,0 +1,82 @@
+#+TITLE: Contribution Guidelines
+
+* Setup
+Follow the README.org file in the root of the repo to get set up!
+
+* Rules
+Make new features in a new branch, and make a pull request when you're ready, after merging the latest changes from master into your pull request.
+
+* Writing some code!
+- To work on backend, work in the ~server~ directory. Self-explanatory configuration, mostly 546-level express and mongo. Test your routes with Postman or ~curl~ or ~httpie~ before implementing into react frontend. NO FRONTEND SHOULD BE PRODUCED IN THE ~server~ FOLDER. Only JSON responses, with ~res.json~.
+- To work on frontend, implement components in ~components~ directory and create pages in ~pages~ directory. Prefix imports with a tilde ~( ~ )~ for absolute imports. Follow the example of the ~Login~ component and ~Login~ page. Not each component needs to have its own page. Communicate with the backend using ~isomorphic-unfetch~. Refer to ~docs/strats.org~ or Khayyam Saleem for questions or pair-programming requests.
+  
+* Tutorial: Implement your own API-connected component!
+Let's implement a simple button that, when you click it, will render a list of all the users in the database!
+1) Create the front-end for your component, in the ~components~ directory. Let's start with the button.
+   #+BEGIN_SRC javascript
+        // components/UserList.js
+        import React, { Component } from 'react'
+        import { Button, List } from 'semantic-ui-react'
+        import {getAllUsers} from "~/utils/api/users"
+
+        export default class UserList extends Component {
+            constructor(props){
+                super(props)
+                this.state = {
+                    showList: true,
+                    userList: ''
+                }
+                this.getUserList.bind(this)
+            }
+
+            handleClick = e => {
+                e.preventDefault()
+                this.setState({ showList: !showList })
+            }
+
+            getUserList = async () => this.setState({ userList: await getAllUsers()})
+
+            render(){
+                const showHide = {
+                    'display': this.state.showList ? 'block' : 'none'
+                };
+                return (
+                    <div className="user-list">
+                    <Button onClick={this.handleClick} content={(this.state.showList) ? "Hide All Users" : "Show All Users"} />
+                    <List relaxed verticalAlign="middle" style={showHide}>
+                    {this.state.userList.map((user, ind) => (
+                        <List.Item key={ind}>
+                        <List.Header>{user.firstName + " " + user.lastName}</List.Header>
+                        <List.Descripton>{user.userType}</List.Description>
+                        </List.Item>
+                    )}
+                    </List>
+                    </div>
+                )
+            }
+        }
+
+   #+END_SRC
+2) Now, we need to implement that ~getAllUsers~ function we imported from ~utils/api/users~. That one will just make a quick call to our API.
+    #+BEGIN_SRC javascript
+    const BASE_PATH = '/api/users'
+    import sendRequest from '~/utils/sendRequest'
+    /* .
+        .
+        . */
+    export const getAllUsers = () =>
+        sendRequest(`${BASE_PATH}/all-users`)
+    #+END_SRC
+3) It's time to dive into the server! Now that we've made our request, we should add a route to our express server to handle that request. We'll add this handler in ~server/api/users.js~
+    #+BEGIN_SRC javascript
+    //remember to add snippet
+    #+END_SRC
+4) Now, we've gotta add the logic into the database api, for our express route to contact. We can add a function in /server/models/User.js to help us get access to that data.
+    #+BEGIN_SRC javascript
+    // remember to add mongo snippet
+    #+END_SRC
+5) Finally, we can see how our component looks by giving it a page to render on! NextJS makes it really easy to get new pages running on the front-end: all you need to do is add a new file in the ~pages~ directory! This will render our ~UserList~ component with ~App~ as the parent component, so we get our precious Navbar wherever we go.
+    #+BEGIN_SRC javascript
+    // remember to add pages snippet
+    #+END_SRC
+
