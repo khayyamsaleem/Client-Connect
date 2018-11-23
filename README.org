@@ -1,6 +1,6 @@
 #+TITLE: CS554 Final Project: Client Connect
 #+OPTIONS: toc:nil num:nil
-#+STARTUP: noindent showall
+#+STARTUP: showall
 
 #+html: <p><img src="./assets/ClientConnectLogo.svg" width="400px" /></p>
 
@@ -19,7 +19,11 @@
     cd cs554-final-proj
   #+END_SRC
 - Create a .env file. For non-prod environments, you can just rename ~.env.sample~ to ~.env~ to get started.
-- Run ~docker-compose up~.
+- Run 
+  #+BEGIN_SRC bash
+    docker-compose build
+    docker-compose up
+  #+END_SRC
 ** Without Docker (annoying)
 - Clone the repository as above.
 - Create a .env file. For non-prod environments, you can just rename ~.env.sample~ to ~.env~ to get started.
@@ -35,6 +39,58 @@
 ** Writing some code!
 - To work on backend, work in the ~server~ directory. Self-explanatory configuration, mostly 546-level express and mongo. Test your routes with Postman or ~curl~ or ~httpie~ before implementing into react frontend. NO FRONTEND SHOULD BE PRODUCED IN THE ~server~ FOLDER. Only JSON responses, with ~res.json~.
 - To work on frontend, implement components in ~components~ directory and create pages in ~pages~ directory. Prefix imports with a tilde ~( ~ )~ for absolute imports. Follow the example of the ~Login~ component and ~Login~ page. Not each component needs to have its own page. Communicate with the backend using ~isomorphic-unfetch~. Refer to ~docs/strats.org~ or Khayyam Saleem for questions or pair-programming requests.
+*** Tutorial: Implement your own API-connected component!
+Let's implement a simple button that, when you click it, will render a list of all the users in the database!
+1) Create the front-end for your component, in the ~components~ directory. Let's start with the button.
+   #+BEGIN_SRC javascript
+     // components/UserList.js
+     import React, { Component } from 'react'
+     import { Button, List } from 'semantic-ui-react'
+     import {getAllUsers} from "~/utils/api/users"
+
+     export default class UserList extends Component {
+         constructor(props){
+             super(props)
+             this.state = {
+                 showList: true,
+                 userList: ''
+             }
+             this.getUserList.bind(this)
+         }
+
+         handleClick = e => {
+             e.preventDefault()
+             this.setState({ showList: !showList })
+         }
+
+
+         getUserList = async () => this.setState({ userList: await getAllUsers()})
+
+
+         render(){
+             const showHide = {
+                 'display': this.state.showList ? 'block' : 'none'
+             };
+             return (
+                     <div className="user-list">
+                        <Button onClick={this.handleClick} content={(this.state.showList) ? "Hide All Users" : "Show All Users"} />
+                        <List relaxed verticalAlign="middle" style={showHide}>
+                            {this.state.userList.map((user, ind) => (
+                                    <List.Item key={ind}>
+                                    <List.Header>{user.firstName + " " + user.lastName}</List.Header>
+                                    <List.Descripton>{user.userType}</List.Description>
+                                    </List.Item>
+                            )}
+                        </List>
+                     </div>
+             )
+         }
+     }
+   #+END_SRC
+   2) Now, we need to implement that ~getAllUsers~ function we imported from ~utils/api/users~. That one will just make a quick call to our API.
+#+BEGIN_SRC javascript
+  //to finish tomorrow
+#+END_SRC
 
 * Stack
 - mongo, express, react (Next.js), node *(MERN)*

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import Head from 'next/head'
-import Login from '~/components/Login'
 import Navbar from '~/components/Navbar'
 import Favicon from '~/assets/favicon.ico'
+import "~/styles/App.scss"
 
 export default class App extends Component {
     constructor(props){

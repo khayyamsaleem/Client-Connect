@@ -6,13 +6,6 @@ import App from '~/containers/App'
 export default () => (
     <App>
         <div className="landing-page">
-            <style>{`
-                body > div,
-                body > div > div,
-                body > div > div > div.landing-page {
-                    height: 100%;
-                }
-            `}</style>
             <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
                 <Grid.Column style={{ maxWidth: 450 }}>
                     <Header as='h2' color='blue' textAlign='center'>
