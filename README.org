@@ -42,7 +42,7 @@
 *** Tutorial: Implement your own API-connected component!
 Let's implement a simple button that, when you click it, will render a list of all the users in the database!
 1) Create the front-end for your component, in the ~components~ directory. Let's start with the button.
-    #+BEGIN_SRC javascript
+        #+BEGIN_SRC javascript
         // components/UserList.js
         import React, { Component } from 'react'
         import { Button, List } from 'semantic-ui-react'
@@ -63,9 +63,7 @@ Let's implement a simple button that, when you click it, will render a list of a
                 this.setState({ showList: !showList })
             }
 
-
             getUserList = async () => this.setState({ userList: await getAllUsers()})
-
 
             render(){
                 const showHide = {
@@ -86,8 +84,8 @@ Let's implement a simple button that, when you click it, will render a list of a
                         )
                 }
             }
-       #+END_SRC
-   2) [@2] Now, we need to implement that ~getAllUsers~ function we imported from ~utils/api/users~. That one will just make a quick call to our API.
+        #+END_SRC
+   2) Now, we need to implement that ~getAllUsers~ function we imported from ~utils/api/users~. That one will just make a quick call to our API.
       #+BEGIN_SRC javascript
         const BASE_PATH = '/api/users'
         import sendRequest from '~/utils/sendRequest'
