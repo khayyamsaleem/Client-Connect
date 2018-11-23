@@ -87,7 +87,7 @@ Let's implement a simple button that, when you click it, will render a list of a
                 }
             }
        #+END_SRC
-   2) Now, we need to implement that ~getAllUsers~ function we imported from ~utils/api/users~. That one will just make a quick call to our API.
+   2) [@2] Now, we need to implement that ~getAllUsers~ function we imported from ~utils/api/users~. That one will just make a quick call to our API.
       #+BEGIN_SRC javascript
         const BASE_PATH = '/api/users'
         import sendRequest from '~/utils/sendRequest'
