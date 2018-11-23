@@ -88,9 +88,28 @@ Let's implement a simple button that, when you click it, will render a list of a
      }
    #+END_SRC
    2) Now, we need to implement that ~getAllUsers~ function we imported from ~utils/api/users~. That one will just make a quick call to our API.
-#+BEGIN_SRC javascript
-  //to finish tomorrow
-#+END_SRC
+        #+BEGIN_SRC javascript
+        const BASE_PATH = '/api/users'
+        import sendRequest from '~/utils/sendRequest'
+        /* .
+        .
+        . */
+        export const getAllUsers = () =>
+            sendRequest(`${BASE_PATH}/all-users`)
+        #+END_SRC
+   3) It's time to dive into the server! Now that we've made our request, we should add a route to our express server to handle that request. We'll add this handler in ~server/api/users.js~
+      #+BEGIN_SRC javascript
+      //remember to add snippet
+      #+END_SRC
+   4) Now, we've gotta add the logic into the database api, for our express route to contact. We can add a function in /server/models/User.js to help us get access to that data.
+      #+BEGIN_SRC javascript
+      // remember to add mongo snippet
+      #+END_SRC
+   5) Finally, we can see how our component looks by giving it a page to render on! NextJS makes it really easy to get new pages running on the front-end: all you need to do is add a new file in the ~pages~ directory! This will render our ~UserList~ component with ~App~ as the parent component, so we get our precious Navbar wherever we go.
+      #+BEGIN_SRC javascript
+      // remember to add pages snippet
+      #+END_SRC
+
 
 * Stack
 - mongo, express, react (Next.js), node *(MERN)*
