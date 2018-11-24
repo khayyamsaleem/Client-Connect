@@ -3,7 +3,6 @@ require('dotenv').config()
 const PORT = process.env.PORT || 3000
 const dev = process.env.NODE_DEV !== 'production'
 
-const passport = require('passport')
 const nextApp = require('next')({ dev })
 const handle = nextApp.getRequestHandler()
 
