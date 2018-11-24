@@ -41,7 +41,6 @@ dist/
 flycheck_*.el
 
 # server auth directory
-/server/
 
 # projectiles files
 .projectile
