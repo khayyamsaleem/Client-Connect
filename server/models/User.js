@@ -31,9 +31,6 @@ const mongoSchema = new Schema({
     joinDate: {
         type: Date,
         default: Date.now
-    },
-    avatar: {
-        type: String
     }
 })
 
@@ -62,18 +59,16 @@ class UserClass {
         )
     }
 
-    static async signInOrSignUp({email, userName, firstName, lastName, userType, middleName, avatar, password}){
+    static async signInOrSignUp({email, userName, firstName, lastName, userType, middleName}){
         const user = await this.findOne({ userName }).select(UserClass.publicFields().join(' '))
         if (user) return user
         const newUser = await this.create({
-            avatar,
             email,
             userName,
             firstName,
             middleName,
             lastName,
-            userType,
-            password
+            userType
         }, (err, u) => (err) ? console.log(err.message) : u)
         return newUser
     }

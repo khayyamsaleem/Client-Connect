@@ -35,8 +35,6 @@ nextApp.prepare().then(() => {
     const app = require('express')()
     app.use(bodyParser.json())
     app.use(bodyParser.urlencoded({ extended : true }))
-    app.use(passport.initialize())
-    require('./passport')(passport)
     const MongoStore = mongoSessionStore(session)
 
     const sess = {
