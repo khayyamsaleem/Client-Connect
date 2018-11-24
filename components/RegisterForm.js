@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Grid, Form, Button, Header, Message} from 'semantic-ui-react'
-import { registerUser, searchUser, checkExists } from '~/utils/api/users'
+import { registerUser, checkExists } from '~/utils/api/users'
 
 export default class RegisterForm extends Component {
     constructor(props){
@@ -32,7 +32,8 @@ export default class RegisterForm extends Component {
             this.setState({ err: {exists: true, header: "Invalid Username", msg: "Username may not contain spaces!"}})
             return
         }
-        if (await checkExists(userName)){
+        const userExists = await checkExists(userName)
+        if (userExists.exists){
             this.setState({ err: {exists: true, header: "Username Taken!", msg: "That username is already taken! Try another."}})
             return
         }

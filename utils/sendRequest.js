@@ -14,9 +14,5 @@ export default async function sendRequest(path, opts = {}) {
 
   const data = await response.json()
 
-  if (data.error) {
-    throw new Error(data.error)
-  }
-
   return data;
 }

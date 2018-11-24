@@ -10,7 +10,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/register', async (req, res) => {
     try {
-        const { email, firstName, lastName, userName, middleName, userType, password } = req.body
+        const { email, firstName, lastName, userName, middleName, userType} = req.body
         const u = await User.signInOrSignUp({email, userName, firstName, lastName, userType, middleName})
         res.json(u)
     } catch (err) {
@@ -21,9 +21,8 @@ router.post('/register', async (req, res) => {
 
 router.post('/exists', async (req, res) => {
     try {
-        res.json(await User.userExists(req.body.query))
+        res.json({ exists: await User.userExists(req.body.query)})
     } catch (err) {
-        console.error(err)
         res.status(500).json({ error: err.message || err.toString() })
     }
 })

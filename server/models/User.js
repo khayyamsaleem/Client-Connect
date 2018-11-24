@@ -25,8 +25,7 @@ const mongoSchema = new Schema({
         required: true
     },
     password: {
-        type: String,
-        required: true
+        type: String
     },
     joinDate: {
         type: Date,
@@ -40,9 +39,10 @@ class UserClass {
     }
 
     static userExists(query){
-        return this.find({
-            userName: query
-        })
+        if(this.find({userName: query}))
+            return true
+        else
+            throw `User ${query} not found!`
     }
 
     static search(query) {
