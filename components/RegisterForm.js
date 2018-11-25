@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Grid, Form, Button, Header, Message} from 'semantic-ui-react'
-import { registerUser, checkExists } from '~/utils/api/users'
+import { registerUser, checkExists, verifyToken } from '~/utils/api/users'
 import Router from 'next/router'
+import { getFromStorage } from '~/utils/storage'
 
 export default class RegisterForm extends Component {
     constructor(props){
@@ -16,6 +17,26 @@ export default class RegisterForm extends Component {
             password: '',
             passwordConfirm: '',
             err: {exists: false, header: '', msg: ''}
+        }
+    }
+
+    async componentDidMount() {
+        const tokenObj = getFromStorage('clientconnect');
+        if (tokenObj && tokenObj.token) {
+            const { token } = tokenObj;
+            // Verify token
+            const res = await verifyToken(token)
+            if (res.success){
+                this.setState({
+                    token,
+                    isLoading: false
+                })
+                Router.push('/profile')
+            } else {
+                this.setState({isLoading: false})
+            }
+        } else {
+            this.setState({isLoading: false})
         }
     }
 

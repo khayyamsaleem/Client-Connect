@@ -37,7 +37,7 @@ router.get('/verify', async (req, res) => {
           })
         }
         if (sessions.length != 1) {
-          return res.status(401).json({
+          return res.json({
             success: false,
             message: 'Error: Invalid token'
           })
