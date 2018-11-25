@@ -7,7 +7,7 @@ export default class Navbar extends Component {
         return (
             <Menu fixed="top" secondary>
                 <Link href='/'>
-                    <Menu.Item header>Client Connect</Menu.Item>
+                    <Menu.Item header as="h2">Client Connect</Menu.Item>
                 </Link>
                 <Menu.Menu position="right">
                     <Link href='/login'>

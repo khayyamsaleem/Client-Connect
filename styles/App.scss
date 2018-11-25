@@ -22,3 +22,11 @@ body > div > div > div.profile-page {
     height: 100%;
 }
 
+#profileGrid {
+    margin: 0 auto !important;
+    margin-top: 80px !important;
+}
+
+#forceSameSegmentHeight {
+    min-height: 400px;
+}

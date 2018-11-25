@@ -1,5 +1,6 @@
 const BASE_PATH = '/api/users'
 import sendRequest from '~/utils/sendRequest'
+import { getFromStorage } from '~/utils/storage'
 
 export const registerUser = newUser =>
     sendRequest(`${BASE_PATH}/register`, {
@@ -30,3 +31,15 @@ export const verifyToken = (token) =>
     sendRequest(`${BASE_PATH}/verify?token=${token}`, {
         method: 'GET'
     })
+
+export const getCurrentUser = () => {
+    const tokenObj = getFromStorage('clientconnect')
+    if (tokenObj && tokenObj.token){
+        const { token } = tokenObj
+        return sendRequest(`${BASE_PATH}/get?token=${token}`, {
+            method: 'GET'
+        })
+    } else {
+        return {error: 'Not Logged In'}
+    }
+}
