@@ -24,6 +24,7 @@
     cd cs554-final-proj
   #+END_SRC
 - Create a .env file. For non-prod environments, you can just rename ~.env.sample~ to ~.env~ to get started.
+- In .env, change ~MONGO_URL_TEST~ to "mongodb://localhost:27017/clientconnect"
 - Run 
   #+BEGIN_SRC bash
     docker-compose build

@@ -32,6 +32,7 @@ export const verifyToken = (token) =>
         method: 'GET'
     })
 
+
 export const getCurrentUser = () => {
     const tokenObj = getFromStorage('clientconnect')
     if (tokenObj && tokenObj.token){

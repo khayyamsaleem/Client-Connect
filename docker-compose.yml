@@ -1,5 +1,15 @@
 version: '3'
 services:
+    mongo:
+        container_name: mongo
+        image: mongo
+        ports:
+            - "27017:27017"
+    redis:
+        container_name: redis
+        image: redis
+        ports:
+            - "6379:6379"
     app:
         container_name: client-connect
         restart: always
@@ -12,13 +22,3 @@ services:
         links:
             - mongo
             - redis
-    mongo:
-        container_name: mongo
-        image: mongo
-        ports:
-            - "27017:27017"
-    redis:
-        container_name: redis
-        image: redis
-        ports:
-            - "6379:6379"
