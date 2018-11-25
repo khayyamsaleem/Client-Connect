@@ -48,6 +48,22 @@ class UserClass {
             return false
     }
 
+    static async seedUser(u){
+        const {firstName, lastName, email, userName, userType, password, joinDate} = u
+        let hashedPassword = this.generateHash(password)
+        if (await this.userExists(userName)) return {success: false, error: "User already in DB"}
+        const created = await this.create({
+            firstName,
+            lastName,
+            email,
+            userName,
+            userType,
+            password: hashedPassword,
+            joinDate
+        })
+        return created
+    }
+
     static async getUser(userName){
         return await this.findOne({userName})
     }

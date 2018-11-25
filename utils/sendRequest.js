@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-unfetch'
-
 import getRootUrl from '~/utils/getRootUrl'
 
 export default async function sendRequest(path, opts = {}) {

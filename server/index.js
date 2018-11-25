@@ -14,6 +14,7 @@ const mongoose = require('mongoose')
 const logger = require('./logs')
 const api = require('./api')
 
+
 const MONGO_URL = dev ? process.env.MONGO_URL_TEST : process.env.MONGO_URL
 const ROOT_URL = dev ? `http://localhost:${PORT}` : process.env.PROD_URL
 
@@ -59,6 +60,8 @@ nextApp.prepare().then(() => {
     }
 
     app.use(session(sess))
+
+
 
     app.get('*', (req, res) => {
         return handle(req, res)
