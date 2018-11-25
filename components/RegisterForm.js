@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Grid, Form, Button, Header, Message} from 'semantic-ui-react'
 import { registerUser, checkExists } from '~/utils/api/users'
+import Router from 'next/router'
 
 export default class RegisterForm extends Component {
     constructor(props){
@@ -23,9 +24,9 @@ export default class RegisterForm extends Component {
     }
 
     handleSubmit = async () => {
-        const {firstName, middleName, lastName, email, userName, userType, password, passwordConfirm} = this.state
+        const {userName, password, passwordConfirm} = this.state
         if(password !== passwordConfirm){
-            this.setState({ err: {exists: true, header: "Password Mistatch!", msg: "Ensure that the password is typed correctly in both fields."}})
+            this.setState({ err: {exists: true, header: "Password Mismatch!", msg: "Ensure that the password is typed correctly in both fields."}})
             return
         }
         if(userName.includes(' ')){
@@ -33,20 +34,19 @@ export default class RegisterForm extends Component {
             return
         }
         const userExists = await checkExists(userName)
-        if (userExists.exists){
+        if (userExists.exists === true){
             this.setState({ err: {exists: true, header: "Username Taken!", msg: "That username is already taken! Try another."}})
             return
         }
         const res = await registerUser(this.state)
-        console.log(res)
-
+        Router.push("/")
     }
 
     render() {
         const userTypes = [
             { key: "client", value: "client", text: "Client (Looking FOR Help)"},
             { key: "freelancer", value: "freelancer", text: "Freelancer (Looking TO Help)"}]
-        const {firstName, middleName, lastName, email, userName, userType, err} = this.state
+        const {firstName, middleName, lastName, userName, userType, err} = this.state
         const suggestedUserName = (() => {
             if (firstName && lastName){
                 let mstr = ""

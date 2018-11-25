@@ -11,7 +11,22 @@ export const searchUser = query =>
         body: JSON.stringify({ query })
     })
 
-export const checkExists = query =>
+export const checkExists = userName =>
     sendRequest(`${BASE_PATH}/exists`, {
-        body: JSON.stringify({ query })
+        body: JSON.stringify({ userName })
+    })
+
+export const loginUser = (userName, password) => 
+    sendRequest(`${BASE_PATH}/login`, {
+        body: JSON.stringify({userName, password})
+    })
+
+export const logoutUser = (token) =>
+    sendRequest(`${BASE_PATH}/logout?token=${token}`, {
+        method: 'GET'
+    })
+
+export const verifyToken = (token) =>
+    sendRequest(`${BASE_PATH}/verify?token=${token}`, {
+        method: 'GET'
     })

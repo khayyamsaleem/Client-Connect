@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
+const bcrypt = require('bcryptjs')
 
-const mongoSchema = new Schema({
+const userSchema = new Schema({
     email: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     userType: {
         type: String,
@@ -22,10 +22,12 @@ const mongoSchema = new Schema({
     },
     userName: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
-        type: String
+        type: String,
+        required: true
     },
     joinDate: {
         type: Date,
@@ -38,15 +40,20 @@ class UserClass {
         return ['id', 'firstName', 'middleName', 'lastName', 'userName', 'email', 'userType']
     }
 
-    static userExists(query){
-        if(this.find({userName: query}))
+    static async userExists(query){
+        const u = await this.find({userName : query})
+        if(u.length > 0)
             return true
         else
-            throw `User ${query} not found!`
+            return false
     }
 
-    static search(query) {
-        return this.find(
+    static async getUser(userName){
+        return await this.findOne({userName})
+    }
+
+    static async search(query) {
+        return await this.find(
             {
                 $or: [
                     { userName: { $regex: query, $options: 'i' } },
@@ -59,23 +66,33 @@ class UserClass {
         )
     }
 
-    static async signInOrSignUp({email, userName, firstName, lastName, userType, middleName}){
+    static async signInOrSignUp({email, userName, firstName, lastName, userType, middleName, password}){
         const user = await this.findOne({ userName }).select(UserClass.publicFields().join(' '))
         if (user) return user
+        let hashedPassword = this.generateHash(password)
         const newUser = await this.create({
-            email,
-            userName,
-            firstName,
-            middleName,
-            lastName,
-            userType
-        }, (err, u) => (err) ? console.log(err.message) : u)
+            email : email,
+            userName : userName,
+            firstName : firstName,
+            middleName : middleName,
+            lastName : lastName,
+            userType : userType,
+            password: hashedPassword
+        })
         return newUser
+    }
+
+    static generateHash(password){
+        return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null)
+    }
+
+    static verifyPassword(password, hashedPassword){
+        return bcrypt.compareSync(password, hashedPassword)
     }
 
 }
 
-mongoSchema.loadClass(UserClass)
+userSchema.loadClass(UserClass)
 
-const User = mongoose.model('User', mongoSchema)
+const User = mongoose.model('User', userSchema)
 module.exports = User
