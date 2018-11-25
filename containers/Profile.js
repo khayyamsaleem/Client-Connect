@@ -27,7 +27,7 @@ export default class extends Component{
         return (
             <div className="profile-page">
                 { (!this.state.isLoading) ? (
-                <Responsive as={Grid} verticalAlign="middle" style={{ width: '60%', height: '60%'}} id="profileGrid" padded divided>
+                <Responsive as={Grid} verticalAlign="middle" style={{ width: '60%', height: '60%'}} id="profileGrid" padded>
                     <Grid.Row columns={2}>
                         <Grid.Column width={6}>
                             <Segment.Group id="forceSameSegmentHeight">
