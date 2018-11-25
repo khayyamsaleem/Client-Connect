@@ -8,6 +8,7 @@ Follow the README.org file in the root of the repo to get set up!
 Make new features in a new branch, and make a pull request when you're ready, after merging the latest changes from master into your pull request.
 
 * Writing some code!
+- If you're unsure of what to do, pluck an issue you think you can handle out of the *Issues* tab on GitHub. Reach out to your team members if you have any questions! I (Khayyam Saleem), should be able to answer most questions about what you may need for contribution, but the slack channel is always the play.
 - To work on backend, work in the ~server~ directory. Self-explanatory configuration, mostly 546-level express and mongo. Test your routes with Postman or ~curl~ or ~httpie~ before implementing into react frontend. NO FRONTEND SHOULD BE PRODUCED IN THE ~server~ FOLDER. Only JSON responses, with ~res.json~.
 - To work on frontend, implement components in ~components~ directory and create pages in ~pages~ directory. Prefix imports with a tilde ~( ~ )~ for absolute imports. Follow the example of the ~Login~ component and ~Login~ page. Not each component needs to have its own page. Communicate with the backend using ~isomorphic-unfetch~. Refer to ~docs/strats.org~ or Khayyam Saleem for questions or pair-programming requests.
   
