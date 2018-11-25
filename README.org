@@ -37,8 +37,8 @@
 - In a separate terminal, start a redis server (~redis-server~)
 - In a separate terminal, run these commands:
   #+BEGIN_SRC bash
+    git checkout -b feature/<feature_name> # e.g. feature/chat-client
     yarn install
-    git checkout <name>-<feature> # e.g. ham-chat-client
     yarn dev:start
   #+END_SRC
 
