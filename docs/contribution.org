@@ -104,7 +104,7 @@ Let's implement a simple button that, when you click it, will render a list of a
     static async function getAll(){
         return this.find(
             { _id: { $exists: true } }, //all users where id field exists
-            { userName, firstName, middleName, lastName, userType, joinDate, email }) //fields to project
+            { userName, firstName, middleName, lastName, userType, joinDate, email } //fields to project
         )
     }
     #+END_SRC
