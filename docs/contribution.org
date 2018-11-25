@@ -77,7 +77,7 @@ Let's implement a simple button that, when you click it, will render a list of a
        .
        . */
     export const getAllUsers = () =>
-        sendRequest(`${BASE_PATH}/all-users`)
+        sendRequest(`${BASE_PATH}/admin/all-users`)
     #+END_SRC
 3) It's time to dive into the server! Now that we've made our request, we should add a route to our express server to handle that request. We'll add this handler in ~server/api/users.js~
     #+BEGIN_SRC javascript
@@ -85,7 +85,7 @@ Let's implement a simple button that, when you click it, will render a list of a
     /* .
        .
        . */
-    router.get('/all-users') = async (req, res) => {
+    router.get('/admin/all-users') = async (req, res) => {
         //we should get all the users and return it as a JSON array, and project only "safe" fields
         try {
             res.json({ success: true, users: await User.getAll() })
