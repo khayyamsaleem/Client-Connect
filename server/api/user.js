@@ -2,26 +2,84 @@ const express = require('express')
 const router = express.Router()
 const logger = require('../logs')
 const User = require('../models/User')
+const UserSession = require('../models/UserSession')
 
 router.post('/login', async (req, res) => {
-    const {userName, password} = req.body
-    const u = User.signInOrSignUp({userName})
+    const { userName, password } = req.body
+    const u = await User.getUser(userName)
+    if (!User.verifyPassword(password, u.password)) {
+        res.json({ auth_error: 'Invalid Password!' })
+
+    } else {
+        const userSession = new UserSession()
+        userSession.userId = u._id
+        userSession.save((err, doc) => {
+            if (err) {
+                console.log(err)
+                return res.status(500).json({ success: false, error: 'Server Error' })
+            }
+            return res.json({ success: true, message: "Logged In", token: doc._id })
+        })
+    }
+})
+
+router.get('/verify', async (req, res) => {
+    const { token } = req.query
+    UserSession.find({
+        _id: token,
+        isDeleted: false
+      }, (err, sessions) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({
+            success: false,
+            message: 'Error: Server error'
+          })
+        }
+        if (sessions.length != 1) {
+          return res.status(401).json({
+            success: false,
+            message: 'Error: Invalid token'
+          })
+        } else {
+          return res.json({
+            success: true,
+            message: 'TOKEN VERIFIED'
+          })
+        }
+    })
+})
+
+router.get('/logout', async (req, res) => {
+    const { token } = req.query
+    UserSession.findOneAndUpdate({
+            _id: token,
+            isDeleted: false
+        }, {
+            $set: { isDeleted: true }
+        }, null, (err, sessions) => {
+        if (err) {
+            console.log(err)
+            return res.status(500).json({ error: err })
+        }
+        return res.json({ success: true, message: "Logged Out" })
+    })
 })
 
 router.post('/register', async (req, res) => {
     try {
-        const { email, firstName, lastName, userName, middleName, userType} = req.body
-        const u = await User.signInOrSignUp({email, userName, firstName, lastName, userType, middleName})
+        const { email, firstName, lastName, userName, middleName, userType, password } = req.body
+        const u = await User.signInOrSignUp({ email, userName, firstName, lastName, userType, middleName, password })
         res.json(u)
     } catch (err) {
-        console.error(err)
-        res.status(500).json({ error : err.message || err.toString() })
+        logger.error(err)
+        res.status(500).json({ error: err.message || err.toString() })
     }
 })
 
 router.post('/exists', async (req, res) => {
     try {
-        res.json({ exists: await User.userExists(req.body.query)})
+        res.json({ exists: await User.userExists(req.body.userName) })
     } catch (err) {
         res.status(500).json({ error: err.message || err.toString() })
     }
@@ -33,7 +91,7 @@ router.post('/search', async (req, res) => {
         const u = await User.search(query)
         res.json(u)
     } catch (err) {
-        res.status(500).json({ error : err.message || err.toString() })
+        res.status(500).json({ error: err.message || err.toString() })
     }
 })
 
