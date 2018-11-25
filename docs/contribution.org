@@ -121,7 +121,3 @@ Let's implement a simple button that, when you click it, will render a list of a
     #+END_SRC
 
 6) Take a look at http://localhost:5000/all-users to see the magic!
-
---------
-TODO: add ~utils/seed.js~ for testing
-
