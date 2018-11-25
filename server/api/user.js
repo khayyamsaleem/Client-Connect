@@ -95,6 +95,15 @@ router.post('/search', async (req, res) => {
     }
 })
 
+router.post('/admin/seed-user', async (req, res) => {
+    try {
+        const u = await User.seedUser(req.body.user)
+        res.json(u)
+    } catch (err) {
+        res.status(500).json({ error: err.message || err.toString() })
+    }
+})
+
 router.get('/get', async (req, res) => {
     try {
         const { token } = req.query
