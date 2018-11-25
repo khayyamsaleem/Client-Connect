@@ -1,4 +1,5 @@
 #+TITLE: Contribution Guidelines
+#+STARTUP: showall
 
 * Setup
 Follow the README.org file in the root of the repo to get set up!
@@ -34,7 +35,13 @@ Let's implement a simple button that, when you click it, will render a list of a
                 this.setState({ showList: !showList })
             }
 
-            getUserList = async () => this.setState({ userList: await getAllUsers()})
+            getUserList = async () => {
+                const userListObj = await getAllUsers()
+                if (userList.success)
+                    this.setState({ userList: userListObj.users })
+                else
+                    console.log("error: ", userListObj)
+            }
 
             render(){
                 const showHide = {
@@ -42,14 +49,18 @@ Let's implement a simple button that, when you click it, will render a list of a
                 };
                 return (
                     <div className="user-list">
-                    <Button onClick={this.handleClick} content={(this.state.showList) ? "Hide All Users" : "Show All Users"} />
-                    <List relaxed verticalAlign="middle" style={showHide}>
-                    {this.state.userList.map((user, ind) => (
-                        <List.Item key={ind}>
-                        <List.Header>{user.firstName + " " + user.lastName}</List.Header>
-                        <List.Descripton>{user.userType}</List.Description>
-                        </List.Item>
-                    )}
+                        <Button onClick={this.handleClick} content={(this.state.showList) ? "Hide All Users" : "Show All Users"} />
+                        <List relaxed verticalAlign="middle" style={showHide}>
+                        {this.state.userList.map((user, ind) => (
+                            <List.Item key={ind}>
+                                <List.Header>{user.firstName + " " + user.lastName}</List.Header>
+                                <List.Descripton>
+                                    <Label horizontal>Account Type</Label>{user.userType}
+                                    <Label horizontal>Email</Label>{user.email}
+                                    <Label horizontal>Join Date</Label>{new Date(user.joinDate).toLocaleDateString('en-US')}
+                                </List.Description>
+                            </List.Item>
+                        )}
                     </List>
                     </div>
                 )
@@ -62,21 +73,54 @@ Let's implement a simple button that, when you click it, will render a list of a
     const BASE_PATH = '/api/users'
     import sendRequest from '~/utils/sendRequest'
     /* .
-        .
-        . */
+       .
+       . */
     export const getAllUsers = () =>
         sendRequest(`${BASE_PATH}/all-users`)
     #+END_SRC
 3) It's time to dive into the server! Now that we've made our request, we should add a route to our express server to handle that request. We'll add this handler in ~server/api/users.js~
     #+BEGIN_SRC javascript
-    //remember to add snippet
+    import User from '../models/User'
+    /* .
+       .
+       . */
+    router.get('/all-users') = async (req, res) => {
+        //we should get all the users and return it as a JSON array, and project only "safe" fields
+        try {
+            res.json({ success: true, users: await User.getAll() })
+        } catch (err) {
+            console.error("Error retrieving all users", err)
+            res.status(500).json({error : err.message || err.toString() })
+        }
+    }
     #+END_SRC
 4) Now, we've gotta add the logic into the database api, for our express route to contact. We can add a function in /server/models/User.js to help us get access to that data.
     #+BEGIN_SRC javascript
-    // remember to add mongo snippet
+    /* .
+       .
+       . */
+    //in the UserClass class
+    static async function getAll(){
+        return this.find(
+            { _id: { $exists: true } }, //all users where id field exists
+            { userName, firstName, middleName, lastName, userType, joinDate, email }) //fields to project
+        )
+    }
     #+END_SRC
 5) Finally, we can see how our component looks by giving it a page to render on! NextJS makes it really easy to get new pages running on the front-end: all you need to do is add a new file in the ~pages~ directory! This will render our ~UserList~ component with ~App~ as the parent component, so we get our precious Navbar wherever we go.
     #+BEGIN_SRC javascript
-    // remember to add pages snippet
+    // pages/all-users.js
+    import App from '~/containers/App'
+    import UserList form '~/components/UserList'
+    export default () => (
+        <App>
+            <UserList />
+        </App>
+    )
     #+END_SRC
+
+6) Take a look at http://localhost:5000/all-users to see the magic!
+
+--------
+TODO: add ~utils/seed.js~ for testing
 
