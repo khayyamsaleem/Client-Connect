@@ -40,7 +40,7 @@ function randomDate(date1, date2){
     }
 }
 
-const seed = () => fs.readFile('./utils/users.txt', 'utf8', (err, data) => {
+const seedDB = () => fs.readFile('./utils/users.txt', 'utf8', (err, data) => {
     data.split('\n').filter(s => !s.match(new RegExp(/.*\t/)) && !(s === "CS -554-WS" || s === "Student" || s === "Teacher")).forEach(async (s, ind) => {
         let [firstName, ...lastName] = s.split(' ')
         lastName = lastName.join(' ').replace('\'', '')
@@ -57,4 +57,4 @@ const seed = () => fs.readFile('./utils/users.txt', 'utf8', (err, data) => {
         console.log(res)
     })
 })
-seed()
+seedDB()
