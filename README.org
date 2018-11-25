@@ -11,7 +11,12 @@
 ** With Docker (easy)
 - Ensure you have docker installed:
   - macOS: ~brew cask install docker~, then run ~Docker.app~ from ~Applications folder~
-  - Linux: ~curl -fsSL https://get.docker.com/ | sh; sudo usermod -aG docker $USER; sudo systemctl start docker~
+  - Linux:
+      #+BEGIN_SRC bash
+       curl -fsSL https://get.docker.com/ | sh
+       sudo usermod -aG docker $USER
+       sudo systemctl start docker
+      #+END_SRC
   - Windows: Find a tutorial somewhere...
 - Clone the repository:
   #+BEGIN_SRC bash
