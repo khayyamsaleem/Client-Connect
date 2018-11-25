@@ -95,5 +95,19 @@ router.post('/search', async (req, res) => {
     }
 })
 
+router.get('/get', async (req, res) => {
+    try {
+        const { token } = req.query
+        const sess = await UserSession.findById(token)
+        if (sess.isDeleted) {
+            console.log("error, tried to fetch user for logged-out user")
+            return res.json({success: false, err : 'Not Logged In!'})
+        }
+        const currentUser = await User.findById(sess.userId)
+        res.json({ success: true, currentUser})
+    } catch (err) {
+        res.status(500).json({success: false, error: err.message || err.toString() })
+    }
+})
 
 module.exports = router
