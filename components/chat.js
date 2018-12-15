@@ -24,7 +24,7 @@ export default class Login extends Component {
         // after socket SEND_MESSAGE data recieved from server, RECIEVE_MESSAGE is called
         // adds sent message's current state to the messages array
         this.socket.on('RECIEVE_MESSAGE', function (data) {
-            console.log('recieve check')
+            console.log('receive check')
             console.log(data)
             addMessage(data)
         })
@@ -40,7 +40,7 @@ export default class Login extends Component {
         // send a message from user form to server
         this.sendMessage = async ev => {
             ev.preventDefault()
-            const { from } = this.state
+            const { to, from, message, timeLog } = this.state
             const userExists = await checkExists(from)
 
             // check if username exists 
@@ -52,10 +52,10 @@ export default class Login extends Component {
 
             // socket emits message 
             this.socket.emit('SEND_MESSAGE', {
-                to: this.state.to,
-                from: this.state.from,
-                message: this.state.message,
-                timeLog: this.state.timeLog
+                to,
+                from,
+                message,
+                timeLog
             });
 
             // clear message sent from state
@@ -66,7 +66,7 @@ export default class Login extends Component {
     // calls sendMessage when form is sumbitted, updates state with value entered
     // div 'messages' loops through the state's messages array and prints the to our page
     render() {
-        const { messages, err, to, from, message } = this.state
+        const { messages, err, to, message } = this.state
         return (
             <div className="chat-form">
                 <Grid textAlign='center' style={{ height: '100%' }} verticalAlign="middle">
@@ -84,7 +84,7 @@ export default class Login extends Component {
 
                             <Form size='large' error={err.exists} onSubmit={this.sendMessage}>
                                 <Segment stacked>
-                                    <Form.Input name='to' placeholder="Receiver: Freelancer's Username"
+                                    <Form.Input name='to' placeholder={`Receiver: ${(this.props.currentuser.userType === 'client') ? 'Freelancer' : 'Client'}'s Username`}
                                         value={to}
                                         onChange={ev => this.setState({ to: ev.target.value })} />
                                     <Form.Input name='message' placeholder="Message..."

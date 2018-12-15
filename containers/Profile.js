@@ -147,7 +147,7 @@ export default class extends Component {
                         <Grid.Row>
                             <Grid.Column width={16} style={{ top: 20 }}>
                                 <Segment.Group id="forceSameSegmentHeight">
-                                    <Segment><Header as='h3'> Search a Freelancer and Start Chatting</Header></Segment>
+                                    <Segment><Header as='h3'> Start Chatting</Header></Segment>
                                     <Segment.Group>
                                         <Segment>
                                             <LiveChat currentuser={currentUser}/>
