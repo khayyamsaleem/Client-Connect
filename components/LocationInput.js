@@ -59,9 +59,11 @@ export default class extends Component {
             })
 
             let inc = 0
+            const sieve = (({ display_name, lon, lat }) => ({ display_name, lon, lat }))
+
             this.setState({
                 options: loc.map(v => ({key: inc++, value: inc, text: v.display_name})),
-                optionsVerbose: loc
+                optionsVerbose: loc.map(v => sieve(v))
             })
         } catch (e) {
             this.setState({options: []})
