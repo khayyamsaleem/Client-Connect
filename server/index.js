@@ -74,16 +74,19 @@ nextApp.prepare().then(() => {
     const redis = require('node-redis')
     const redisClient = redis.createClient()
 
+
+    //check redis conn
     redisClient.on('connect', function() {
         console.log('Redis client connected');
     });
 
-    
+    // error if Redis conn fails
     redisClient.on("error", function (err) {
         console.log("Error " + err);
     });
     
-    //test connection
+    
+    // redis test function
     redisClient.set('my test key', 'my test value', redis.print);
     redisClient.get('my test key', function (error, result) {
         if (error) {
@@ -100,7 +103,7 @@ nextApp.prepare().then(() => {
     username = ''
     reciever = ''
 
-    // message history to cache in redis
+    // message history to cache in redis, array of message objects
     msgHist = []
 
     io.on('connection', function (client) {
@@ -132,8 +135,9 @@ nextApp.prepare().then(() => {
             delete users[username]
             console.log('User disconnected')
             console.log(msgHist)
+
+            //stringify message history to cache in redis
             msgHist = JSON.stringify(msgHist)
-        
             redisClient.set("Chat:History", msgHist, redis.print);
             
  
