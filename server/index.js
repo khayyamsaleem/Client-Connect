@@ -14,9 +14,9 @@ const mongoose = require('mongoose')
 const logger = require('./logs')
 const api = require('./api')
 
-
 const MONGO_URL = dev ? process.env.MONGO_URL_TEST : process.env.MONGO_URL
 const ROOT_URL = dev ? `http://localhost:${PORT}` : process.env.PROD_URL
+
 
 const options = {
   useNewUrlParser: true,
@@ -62,11 +62,27 @@ nextApp.prepare().then(() => {
     app.use(session(sess))
 
 
-
     app.get('*', (req, res) => {
         return handle(req, res)
     })
 
+    /*
+    const express = require('express')
+    var http = require('http')
+    const server = require('http').createServer(express)
+    */
 
-    app.listen(PORT, () => logger.info(`server running @ ${ROOT_URL}`))
+    server = app.listen(PORT, () => logger.info(`server running @ ${ROOT_URL}`))
+
+    const io = require('socket.io').listen(server)
+
+    //connect to a socket
+
+    io.on('connection', (client) => {
+        console.log('Connection to client sucessfull:' + client)
+        client.on('SEND_MESSAGE', async function (data) {
+            io.emit('RECIEVE_MESSAGE', data)
+        })
+    })
+
 })

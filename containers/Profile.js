@@ -4,6 +4,7 @@ import { Grid, Header, Segment, Label, Icon, Responsive } from 'semantic-ui-reac
 import '~/styles/App.scss'
 import { getCurrentUser } from '~/utils/api/users'
 import Router from 'next/router'
+import LiveChat from '~/components/chat'
 
 export default class extends Component{
    constructor(props){
@@ -63,6 +64,18 @@ export default class extends Component{
                                 </Segment.Group>
                             </Segment.Group>
                         </Grid.Column>
+
+                        <Grid.Column width={16} style={{ top: 20}}>
+                            <Segment.Group id="forceSameSegmentHeight">
+                                <Segment><Header as='h3'> Search a Freelancer and Start Chatting</Header></Segment>
+                                <Segment.Group>
+                                    <Segment> 
+                                        <LiveChat />
+                                    </Segment>
+                                </Segment.Group>
+                            </Segment.Group>
+                        </Grid.Column>
+
                     </Grid.Row>
                     <Grid.Row textAlign="center">
                         <Grid.Column>
