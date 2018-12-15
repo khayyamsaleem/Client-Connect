@@ -25,12 +25,11 @@
     cd cs554-final-proj
   #+END_SRC
 - Create a .env file. For non-prod environments, you can just rename ~.env.sample~ to ~.env~ to get started.
-- In .env, change ~MONGO_URL_TEST~ to "mongodb://localhost:27017/clientconnect"
+- In .env, change ~MONGO_URL_TEST~ to "mongodb://mongo:27017/clientconnect"
 - Run 
   #+BEGIN_SRC bash
     git checkout -b feature/<feature-name> # e.g feature/chat-client
-    docker-compose build
-    docker-compose up
+    docker-compose up --build
   #+END_SRC
 *** Without Docker (annoying)
 - Clone the repository as above.
@@ -40,7 +39,7 @@
 - In a separate terminal, start a redis server (~redis-server~)
 - In a separate terminal, run these commands:
   #+BEGIN_SRC bash
-    git checkout -b feature/<feature-_name> # e.g. feature/chat-client
+    git checkout -b feature/<feature-name> # e.g. feature/chat-client
     yarn install
     yarn dev:start
   #+END_SRC

@@ -32,6 +32,14 @@ const userSchema = new Schema({
     joinDate: {
         type: Date,
         default: Date.now
+    },
+    projects: {
+        type: [Schema.Types.ObjectId],
+        default: []
+    },
+    skills: {
+        type: [String],
+        default: []
     }
 })
 
@@ -49,7 +57,7 @@ class UserClass {
     }
 
     static async seedUser(u){
-        const {firstName, lastName, email, userName, userType, password, joinDate} = u
+        const {firstName, lastName, email, userName, userType, password, joinDate, skills} = u
         let hashedPassword = this.generateHash(password)
         if (await this.userExists(userName)) return {success: false, error: "User already in DB"}
         const created = await this.create({
@@ -59,7 +67,9 @@ class UserClass {
             userName,
             userType,
             password: hashedPassword,
-            joinDate
+            joinDate,
+            projects: [],
+            skills
         })
         return created
     }
@@ -93,7 +103,8 @@ class UserClass {
             middleName : middleName,
             lastName : lastName,
             userType : userType,
-            password: hashedPassword
+            password: hashedPassword,
+            skills: []
         })
         return newUser
     }
