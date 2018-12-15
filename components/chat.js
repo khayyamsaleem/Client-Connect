@@ -15,7 +15,8 @@ export default class Chat extends Component {
             message: '',
             messages: [],
             err: { exists: false, header: '', msg: '' },
-            timeLog: new Date().toLocaleString()
+            timeLog: new Date().toLocaleString(),
+            rooms: []
 
         };
 
@@ -24,16 +25,12 @@ export default class Chat extends Component {
         // after socket SEND_MESSAGE data recieved from server, RECIEVE_MESSAGE is called
         // adds sent message's current state to the messages array
         this.socket.on('RECIEVE_MESSAGE', function (data) {
-            console.log('receive check')
-            console.log(data)
             addMessage(data)
         })
 
         // concat state data to array
         const addMessage = data => {
             this.setState({ messages: [...this.state.messages, data] })
-            console.log(this.state.messages)
-            console.log('hist chec')
         }
 
 
@@ -41,14 +38,21 @@ export default class Chat extends Component {
         this.sendMessage = async ev => {
             ev.preventDefault()
             const { to, from, message, timeLog } = this.state
-            const userExists = await checkExists(from)
+            const userExists = await checkExists(to)
 
             // check if username exists 
             if (userExists.exists === false) {
-                this.setState({ err: { exists: true, header: "No Such User!", msg: "Ensure your username is typed correctly" } })
+                this.setState({ err: { exists: false, header: "No Such User!", msg: "Ensure your username is typed correctly" } })
                 return
             }
-            this.setState({ err: { exists: false, header: "", msg: "" } })
+
+            if ( this.state.message === '' ) {
+                this.setState({ err: { exists: false, header: "Please Provide a Message!", msg: "" } })
+                return
+            }
+            else{
+                this.setState({ err: { exists: true, header: "", msg: "" } })
+            }
 
             // socket emits message 
             this.socket.emit('SEND_MESSAGE', {
@@ -57,6 +61,7 @@ export default class Chat extends Component {
                 message,
                 timeLog
             });
+
 
             // clear message sent from state
             this.setState({ message: '' });

@@ -10,11 +10,13 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const mongoSessionStore = require('connect-mongo')
 const mongoose = require('mongoose')
+const redis = require('redis')
 
 const logger = require('./logs')
 const api = require('./api')
 
 const MONGO_URL = dev ? process.env.MONGO_URL_TEST : process.env.MONGO_URL
+const REDIS_URL = process.env.REDIS_URL || `http://localhost:6379`
 const ROOT_URL = dev ? `http://localhost:${PORT}` : process.env.PROD_URL
 
 
@@ -66,23 +68,80 @@ nextApp.prepare().then(() => {
     app.get('*', (req, res) => {
         return handle(req, res)
     })
-
-    /*
-    const express = require('express')
-    var http = require('http')
-    const server = require('http').createServer(express)
-    */
-
     server = app.listen(PORT, () => logger.info(`server running @ ${ROOT_URL}`))
+
 
     const io = require('socket.io').listen(server)
 
-    //connect to a socket
+    
+    const redisClient = redis.createClient(REDIS_URL)
 
-    io.on('connection', (client) => {
-        console.log('Connection to client sucessfull:' + client)
+
+    //check redis conn
+    redisClient.on('connect', function() {
+        console.log('Redis client connected');
+    });
+
+    // error if Redis conn fails
+    redisClient.on("error", function (err) {
+        console.log("Error " + err);
+    });
+    
+    
+    // redis test function
+    redisClient.set('my test key', 'my test value', redis.print);
+    redisClient.get('my test key', function (error, result) {
+        if (error) {
+            console.log(error);
+            throw error;
+        }
+        console.log('GET result ->' + result);
+    });
+    
+
+    // object to hold users connected to socket.io
+    const users = {}
+    username = ''
+    reciever = ''
+
+    // message history to cache in redis, array of message objects
+    msgHist = []
+
+    io.on('connection', function (client) {
+        let socketid = client.id
+
         client.on('SEND_MESSAGE', async function (data) {
+            curr_user = data.from
+            curr_rcvr = data.to
+
+            // loop through username from socket data, build new string to save usernames and their socket id
+            let temp1 = ''
+            for(var i = 0; i < curr_user.length; i++){
+                temp1 += curr_user[i]
+            }
+            username = temp1
+            users[username] = socketid
+            temp1 = ''
+            delete users['']
+
+            console.log(users)
+            dataHist = data.message
+            msgHist.push(dataHist)
+        
             io.emit('RECIEVE_MESSAGE', data)
+        })
+
+        client.on('disconnect', function() {
+            //remove user from active list of user when they disconnect (any time they leave profile page)
+            delete users[username]
+            console.log('User disconnected')
+            console.log(msgHist)
+
+            //stringify message history to cache in redis
+            msgHist = JSON.stringify(msgHist)
+            redisClient.set("Chat:History", msgHist, redis.print);
+            
+ 
         })
     })
 

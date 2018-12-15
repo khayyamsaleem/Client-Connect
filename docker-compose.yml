@@ -6,7 +6,7 @@ services:
         ports:
             - "27017:27017"
     redis:
-        container_name: redis
+        container_name: message-cache
         image: redis
         ports:
             - "6379:6379"
