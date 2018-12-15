@@ -32,7 +32,12 @@ export const verifyToken = (token) =>
         method: 'GET'
     })
 
-
+export const updateUser = (userName, field, newValue) => {
+    sendRequest(`${BASE_PATH}/update`, {
+        method: 'PUT',
+        body: JSON.stringify({userName: userName, field: field, newValue: newValue})
+    })
+}
 export const getCurrentUser = () => {
     const tokenObj = getFromStorage('clientconnect')
     if (tokenObj && tokenObj.token){

@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import LogoutButton from '~/components/LogoutButton'
-import { Grid, Header, Segment, Label, Responsive, Form, Button } from 'semantic-ui-react'
+import LocationInput from '~/components/LocationInput'
+import { Grid, Header, Segment, Button, Label, Form, Icon, Responsive, Dropdown } from 'semantic-ui-react'
 import '~/styles/App.scss'
-import { getCurrentUser, updateSkills } from '~/utils/api/users'
+import { getCurrentUser, updateUser } from '~/utils/api/users'
 import { getProjectsByUser } from '~/utils/api/projects'
 import Router from 'next/router'
 import AddProject from '~/components/AddProject'
@@ -12,6 +13,7 @@ import LiveChat from '~/components/chat'
 export default class extends Component {
     constructor(props) {
         super(props)
+        this.textinput = React.createRef()
         this.state = {
             currentUser: {},
             projects: [],
@@ -34,6 +36,16 @@ export default class extends Component {
             })
         }
     }
+
+    updateUser(newUser) { this.setState({currentUser: newUser}) }
+    getUser() { return this.state.currentUser }
+    async handleClear() {
+        let updatedUser = this.state.currentUser
+        updatedUser.location = null
+        this.setState({currentUser: updatedUser})
+        await updateUser(updatedUser.userName, "location", null)
+    }
+
 
     updateSkills = async (e) => {
         e.preventDefault()
@@ -84,6 +96,20 @@ export default class extends Component {
                                             <Label horizontal>Join Date</Label>
                                             {new Date(currentUser.joinDate).toLocaleDateString('en-US')}
                                         </Segment>
+                                        {
+                                            this.state.currentUser.location ? 
+                                            <Segment>
+                                                <Label horizontal>Location</Label>
+                                                <Segment>
+                                                    {this.state.currentUser.location.display_name}
+                                                    <Button style={{marginLeft: 10}} content="Clear" size="mini" onClick={this.handleClear.bind(this)}/>
+                                                </Segment>
+                                            </Segment> :
+                                            <Segment>
+                                                <Label horizontal>Location</Label>
+                                                <LocationInput setUser={this.updateUser.bind(this)} getUser={this.getUser.bind(this)}/>
+                                            </Segment>
+                                        }
                                         {(currentUser.userType === 'freelancer') ? (
                                             <Segment>
                                                 <Label horizontal>Skills</Label>

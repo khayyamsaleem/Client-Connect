@@ -40,12 +40,13 @@ const userSchema = new Schema({
     skills: {
         type: [String],
         default: []
-    }
+    },
+    location: Object
 })
 
 class UserClass {
     static publicFields() {
-        return ['id', 'firstName', 'middleName', 'lastName', 'userName', 'email', 'userType']
+        return ['id', 'firstName', 'middleName', 'lastName', 'userName', 'email', 'userType', 'location', 'skills']
     }
 
     static async userExists(query){
@@ -89,6 +90,13 @@ class UserClass {
                 ],
             },
             UserClass.publicFields().join(' '),
+        )
+    }
+
+    static async updateField(user, field, newValue) {
+        return await this.updateOne(
+            {'_id': user.id},
+            {$set: {[field]: newValue}}
         )
     }
 
