@@ -30,8 +30,6 @@ export default class Login extends Component {
         this.socket.on('RECIEVE_MESSAGE', function (data) {
             console.log('recieve check')
             console.log(data)
-            console.log(getFromStorage('clientconnect'))
-            console.log('token check')
             addMessage(data)
         })
 
@@ -46,15 +44,22 @@ export default class Login extends Component {
         // send a message from user form to server
         this.sendMessage = async ev => {
             ev.preventDefault()
-            const { from } = this.state
-            const userExists = await checkExists(from)
+            const { to } = this.state
+            const userExists = await checkExists(to)
 
             // check if username exists 
             if (userExists.exists === false) {
-                this.setState({ err: { exists: true, header: "No Such User!", msg: "Ensure your username is typed correctly" } })
+                this.setState({ err: { exists: false, header: "No Such User!", msg: "Ensure your username is typed correctly" } })
                 return
             }
-            this.setState({ err: { exists: false, header: "", msg: "" } })
+
+            if ( this.state.message == '' ) {
+                this.setState({ err: { exists: false, header: "Please Provide a Message!", msg: "" } })
+                return
+            }
+            else{
+                this.setState({ err: { exists: true, header: "", msg: "" } })
+            }
 
             // socket emits message 
             this.socket.emit('SEND_MESSAGE', {
@@ -62,7 +67,14 @@ export default class Login extends Component {
                 from: this.state.from,
                 message: this.state.message,
                 timeLog: this.state.timeLog
+                //messages: this.state.messages
             });
+
+            /*
+            this.socket.on('MESSAGE_HISTORY', {
+                messages: this.state.messages
+            })
+            */
 
             // clear message sent from state
             this.setState({ message: '' });
