@@ -84,7 +84,7 @@ export default class Login extends Component {
 
                             <Form size='large' error={err.exists} onSubmit={this.sendMessage}>
                                 <Segment stacked>
-                                    <Form.Input name='to' placeholder="Reciever: Freelancer's Username"
+                                    <Form.Input name='to' placeholder="Receiver: Freelancer's Username"
                                         value={to}
                                         onChange={ev => this.setState({ to: ev.target.value })} />
                                     <Form.Input name='message' placeholder="Message..."
