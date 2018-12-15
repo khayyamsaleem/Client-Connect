@@ -119,4 +119,12 @@ router.get('/get', async (req, res) => {
     }
 })
 
+router.post('/update-skills', async (req, res) => {
+    const { userId, skills } = req.body
+    User.updateOne({_id: userId}, {$set: {skills}}, (err, result) => {
+        if (err) throw err
+        res.json({success: true, message: `Updated skills of user with userId ${userId}`, result})
+    })
+})
+
 module.exports = router

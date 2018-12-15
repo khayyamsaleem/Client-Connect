@@ -27,7 +27,12 @@ router.post('/new', async (req, res) => {
 router.get('/get', async (req, res) => {
     const { userId } = req.query
     const user = await User.findById(userId)
-    const projects = await Project.find({owner : user._id})
+    const projects = await Project.find({
+        $or : [
+            { owner : user._id },
+            { freelancer: user._id }
+        ]
+    })
     res.json({
         success: true,
         projects

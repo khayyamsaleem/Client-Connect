@@ -13,6 +13,9 @@ const projectSchema = new Schema({
     owner: {
         type: Schema.Types.ObjectId,
         required: true
+    },
+    freelancer: {
+        type: Schema.Types.ObjectId
     }
 })
 

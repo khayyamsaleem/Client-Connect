@@ -10,3 +10,4 @@ export const getProjectsByUser = (userId) =>
     sendRequest(`${BASE_PATH}/get?userId=${userId}`, {
         method: 'GET'
     })
+

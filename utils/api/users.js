@@ -44,3 +44,8 @@ export const getCurrentUser = () => {
         return {error: 'Not Logged In'}
     }
 }
+
+export const updateSkills = (userId, skills) =>
+    sendRequest(`${BASE_PATH}/update-skills`, {
+        body: JSON.stringify({userId, skills})
+    })
