@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import LogoutButton from '~/components/LogoutButton'
-import { Grid, Header, Segment, Label, Responsive, Form, Button} from 'semantic-ui-react'
+import { Grid, Header, Segment, Label, Responsive, Form, Button } from 'semantic-ui-react'
 import '~/styles/App.scss'
 import { getCurrentUser, updateSkills } from '~/utils/api/users'
 import { getProjectsByUser } from '~/utils/api/projects'
 import Router from 'next/router'
 import AddProject from '~/components/AddProject'
 import allSkills from '~/utils/skills'
+import LiveChat from '~/components/chat'
 
 export default class extends Component {
     constructor(props) {
@@ -43,21 +44,21 @@ export default class extends Component {
 
     toggleSkill = async (e) => {
         let { skills, currentUser } = this.state
-        if (e.target.checked){
-            if (!skills.includes(e.target.value)){
+        if (e.target.checked) {
+            if (!skills.includes(e.target.value)) {
                 skills.push(e.target.value)
                 currentUser.skills = skills
-                this.setState({skills, currentUser})
+                this.setState({ skills, currentUser })
             }
         } else {
             skills = skills.filter(s => s !== e.target.value)
             currentUser.skills = skills
-            this.setState({skills, currentUser})
+            this.setState({ skills, currentUser })
         }
     }
 
     render() {
-        const { projects, currentUser, skills} = this.state
+        const { projects, currentUser, skills } = this.state
         return (
             <div className="profile-page">
                 {(!this.state.isLoading) ? (
@@ -88,7 +89,7 @@ export default class extends Component {
                                                 <Label horizontal>Skills</Label>
                                                 {currentUser.skills.join(", ")}
                                             </Segment>
-                                        ): <div></div>}
+                                        ) : <div></div>}
                                     </Segment.Group>
                                 </Segment.Group>
                             </Grid.Column>
@@ -124,15 +125,15 @@ export default class extends Component {
                                             <Form>
                                                 <Form.Group inline>
                                                     {allSkills.slice(0, Math.floor(allSkills.length / 3)).map((skill, i) =>
-                                                        <Form.Input onChange={this.toggleSkill} name={skill} key={i} type="checkbox" label={skill} value={skill} checked={currentUser.skills.includes(skill) || skills.includes(skill)}/>)}
+                                                        <Form.Input onChange={this.toggleSkill} name={skill} key={i} type="checkbox" label={skill} value={skill} checked={currentUser.skills.includes(skill) || skills.includes(skill)} />)}
                                                 </Form.Group>
                                                 <Form.Group inline>
                                                     {allSkills.slice(Math.floor(allSkills.length / 3), Math.floor(allSkills.length / 3) * 2).map((skill, i) =>
-                                                        <Form.Input onChange={this.toggleSkill} name={skill} key={i} type="checkbox" label={skill} value={skill} checked={currentUser.skills.includes(skill) || skills.includes(skill)}/>)}
+                                                        <Form.Input onChange={this.toggleSkill} name={skill} key={i} type="checkbox" label={skill} value={skill} checked={currentUser.skills.includes(skill) || skills.includes(skill)} />)}
                                                 </Form.Group>
                                                 <Form.Group inline>
                                                     {allSkills.slice(Math.floor(allSkills.length / 3) * 2, allSkills.length).map((skill, i) =>
-                                                        <Form.Input onChange={this.toggleSkill} name={skill} key={i} type="checkbox" label={skill} value={skill} checked={currentUser.skills.includes(skill) || skills.includes(skill)}/>)}
+                                                        <Form.Input onChange={this.toggleSkill} name={skill} key={i} type="checkbox" label={skill} value={skill} checked={currentUser.skills.includes(skill) || skills.includes(skill)} />)}
                                                 </Form.Group>
                                             </Form>
                                         </Segment>
@@ -143,6 +144,18 @@ export default class extends Component {
                                 </Grid.Column>
                             </Grid.Row>
                         )}
+                        <Grid.Row>
+                            <Grid.Column width={16} style={{ top: 20 }}>
+                                <Segment.Group id="forceSameSegmentHeight">
+                                    <Segment><Header as='h3'> Search a Freelancer and Start Chatting</Header></Segment>
+                                    <Segment.Group>
+                                        <Segment>
+                                            <LiveChat currentuser={currentUser}/>
+                                        </Segment>
+                                    </Segment.Group>
+                                </Segment.Group>
+                            </Grid.Column>
+                        </Grid.Row>
                         <Grid.Row textAlign="center">
                             <Grid.Column>
                                 <LogoutButton />
