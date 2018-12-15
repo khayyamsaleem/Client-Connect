@@ -78,10 +78,30 @@ nextApp.prepare().then(() => {
 
     //connect to a socket
 
-    io.on('connection', (client) => {
-        console.log('Connection to client sucessfull:' + client)
+    const users = {}
+    const rooms = {}
+    username = ''
+
+
+
+    io.on('connection', function (client) {
+        let socketid = client.id
         client.on('SEND_MESSAGE', async function (data) {
+            curr_user = data.from
+            let temp = ''
+            for(var i = 0; i < curr_user.length; i++){
+                temp += curr_user[i]
+            }
+            username = temp
+            temp = ''
+            users[username] = socketid
+            //Object.assign(users, {data: socketid})
+            console.log(users)
             io.emit('RECIEVE_MESSAGE', data)
+        })
+        client.on('disconnect', function(){
+            users[username] = ''
+            console.log('User disconnected')
         })
     })
 

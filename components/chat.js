@@ -15,7 +15,11 @@ export default class Login extends Component {
             message: '',
             messages: [],
             err: { exists: false, header: '', msg: '' },
-            timeLog: new Date().toLocaleString()
+
+            //isLoading: false,
+            //getFromStorage('clientconnect')
+            timeLog: new Date().toLocaleString(),
+            rooms: []
 
         };
 
@@ -26,6 +30,8 @@ export default class Login extends Component {
         this.socket.on('RECIEVE_MESSAGE', function (data) {
             console.log('recieve check')
             console.log(data)
+            console.log(getFromStorage('clientconnect'))
+            console.log('token check')
             addMessage(data)
         })
 
