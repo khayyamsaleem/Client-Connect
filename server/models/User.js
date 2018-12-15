@@ -33,7 +33,7 @@ const userSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    location: String,
+    location: Object,
     skills: {
         type: [String],
         required: () => {
@@ -72,6 +72,7 @@ class UserClass {
     }
 
     static async getUser(userName){
+        console.log("pongas")
         return await this.findOne({userName})
     }
 
@@ -90,6 +91,7 @@ class UserClass {
     }
 
     static async updateField(user, field, newValue) {
+        console.log("pingas")
         return await this.updateOne(
             {'_id': user.id},
             {$set: {[field]: newValue}}

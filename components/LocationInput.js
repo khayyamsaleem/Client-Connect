@@ -12,7 +12,8 @@ export default class extends Component {
         this.state = {
             options: [],
             optionsVerbose: [],
-            inputValue: []
+            inputValue: [],
+            selected: null
         }
     }
 
@@ -23,18 +24,21 @@ export default class extends Component {
     async handleInputChange(e) {
         clearTimeout(this.timer);
         this.timer = setTimeout(this.geocodeInput.bind(this), WAIT_INTERVAL)
-        this.setState({ inputValue: e.target.value })
+        this.setState({ inputValue: e.target.value, selected: null })
     }
     async handleSubmit(e) {
         let updatedUser = this.props.getUser()
 
-        await updateUser(updatedUser.userName, "location", this.state.inputValue)
+        if (!this.state.selected) return
 
-        updatedUser.location = this.state.inputValue
-        await this.geocodeInput(this.state.inputValue)
+        await updateUser(updatedUser.userName, "location", this.state.selected)
+        updatedUser.location = this.state.selected
         this.props.setUser(updatedUser)
     }
-    
+    handleDropdownSelect(e, value) {
+        e.persist()
+        this.setState({selected: this.state.optionsVerbose[value.value-1]})
+    }
     handleKeyDown(e) {
         if (e.keyCode == 13) {
             geocodeInput()
@@ -69,8 +73,9 @@ export default class extends Component {
         return <Segment>
             <Dropdown 
                 onSearchChange={this.handleInputChange.bind(this)} 
+                onChange={this.handleDropdownSelect.bind(this)}
                 onKeyDown={this.handleKeyDown.bind(this)}
-                placeholder='Select Country' 
+                placeholder='Type a place' 
                 fluid search selection 
                 options={this.state.options} />
             <Button content="Submit" onClick={this.handleSubmit.bind(this)}/>

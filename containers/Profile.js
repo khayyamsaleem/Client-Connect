@@ -3,7 +3,7 @@ import LogoutButton from '~/components/LogoutButton'
 import LocationInput from '~/components/LocationInput'
 import { Grid, Header, Segment, Button, Label, Form, Icon, Responsive, Dropdown } from 'semantic-ui-react'
 import '~/styles/App.scss'
-import { getCurrentUser } from '~/utils/api/users'
+import { getCurrentUser, updateUser } from '~/utils/api/users'
 import Router from 'next/router'
 
 
@@ -29,10 +29,11 @@ export default class extends Component{
 
     updateUser(newUser) { this.setState({currentUser: newUser}) }
     getUser() { return this.state.currentUser }
-    handleClear() {
+    async handleClear() {
         let updatedUser = this.state.currentUser
         updatedUser.location = null
         this.setState({currentUser: updatedUser})
+        await updateUser(updatedUser.userName, "location", null)
     }
 
     render() {
@@ -66,7 +67,7 @@ export default class extends Component{
                                         <Segment>
                                             <Label horizontal>Location</Label>
                                             <Segment>
-                                                {this.state.currentUser.location}
+                                                {this.state.currentUser.location.display_name}
                                                 <Button style={{marginLeft: 10}} content="Clear" size="mini" onClick={this.handleClear.bind(this)}/>
                                             </Segment>
                                         </Segment> :
