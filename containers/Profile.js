@@ -1,17 +1,20 @@
 import React, { Component } from 'react'
-import LogoutButton from '~/components/LogoutButton'
-import { Grid, Header, Segment, Label, Responsive, Form, Modal } from 'semantic-ui-react'
-import '~/styles/App.scss'
-import { getCurrentUser, updateSkills, getUserById } from '~/utils/api/users'
-import { getProjectsByUser } from '~/utils/api/projects'
+import { Grid, Header, Segment, Label, Responsive, Form, Modal, Button } from 'semantic-ui-react'
 import Router from 'next/router'
+
+import LogoutButton from '~/components/LogoutButton'
+import LocationInput from '~/components/LocationInput'
 import AddProject from '~/components/AddProject'
 import LiveChat from '~/components/Chat'
+
+import { getCurrentUser, updateSkills, getUserById, updateUser } from '~/utils/api/users'
+import { getProjectsByUser } from '~/utils/api/projects'
 import allSkills from '~/utils/skills'
 
 export default class extends Component {
     constructor(props) {
         super(props)
+        this.textinput = React.createRef()
         this.state = {
             currentUser: {},
             projects: [],
@@ -37,7 +40,21 @@ export default class extends Component {
         }
     }
 
-    updateSkills = async () => {
+    updateUser(newUser) { this.setState({currentUser: newUser}) }
+
+    getUser() { return this.state.currentUser }
+    
+
+    async handleClear() {
+        let updatedUser = this.state.currentUser
+        updatedUser.location = null
+        this.setState({currentUser: updatedUser})
+        await updateUser(updatedUser.userName, "location", null)
+    }
+
+
+    updateSkills = async (e) => {
+        e.preventDefault()
         const { skills, currentUser } = this.state
         await updateSkills(currentUser._id, skills)
     }
@@ -100,6 +117,20 @@ export default class extends Component {
                                             <Label horizontal>Join Date</Label>
                                             {new Date(currentUser.joinDate).toLocaleDateString('en-US')}
                                         </Segment>
+                                        {
+                                            this.state.currentUser.location ? 
+                                            <Segment>
+                                                <Label horizontal>Location</Label>
+                                                <Segment>
+                                                    {this.state.currentUser.location.display_name}
+                                                    <Button style={{marginLeft: 10}} content="Clear" size="mini" onClick={this.handleClear.bind(this)}/>
+                                                </Segment>
+                                            </Segment> :
+                                            <Segment>
+                                                <Label horizontal>Location</Label>
+                                                <LocationInput setUser={this.updateUser.bind(this)} getUser={this.getUser.bind(this)}/>
+                                            </Segment>
+                                        }
                                         {(currentUser.userType === 'freelancer') ? (
                                             <Segment>
                                                 <Label horizontal>Skills</Label>
@@ -193,18 +224,6 @@ export default class extends Component {
                                 </Grid.Column>
                             </Grid.Row>
                         )}
-                        {/* <Grid.Row>
-                            <Grid.Column width={16} style={{ top: 20 }}>
-                                <Segment.Group id="forceSameSegmentHeight">
-                                    <Segment><Header as='h3'> Start Chatting</Header></Segment>
-                                    <Segment.Group>
-                                        <Segment>
-                                            <LiveChat currentuser={currentUser}/>
-                                        </Segment>
-                                    </Segment.Group>
-                                </Segment.Group>
-                            </Grid.Column>
-                        </Grid.Row> */}
                         <Grid.Row textAlign="center">
                             <Grid.Column>
                                 <LogoutButton />

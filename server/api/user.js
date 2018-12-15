@@ -120,6 +120,16 @@ router.post('/admin/seed-user', async (req, res) => {
     }
 })
 
+router.put('/update', async (req, res) => {
+    try {
+        const u = await User.getUser(req.body.userName)
+        const r = await User.updateField(u, req.body.field, req.body.newValue)
+        res.json(r)
+    } catch (err) {
+        res.status(500).json({error: err.message || err.toString() })
+    }
+})
+
 router.get('/get', async (req, res) => {
     try {
         const { token } = req.query
