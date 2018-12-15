@@ -29,8 +29,7 @@
 - Run 
   #+BEGIN_SRC bash
     git checkout -b feature/<feature-name> # e.g feature/chat-client
-    docker-compose build
-    docker-compose up
+    docker-compose up --build
   #+END_SRC
 *** Without Docker (annoying)
 - Clone the repository as above.
