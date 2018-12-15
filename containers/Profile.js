@@ -218,15 +218,15 @@ export default class extends Component {
                                             <Form>
                                                 <Form.Group inline>
                                                     {allSkills.slice(0, Math.floor(allSkills.length / 3)).map((skill, i) =>
-                                                        <Form.Input onChange={this.toggleSkill} name={skill} key={i} type="checkbox" label={skill} value={skill} checked={currentUser.skills.includes(skill) || skills.includes(skill)} />)}
+                                                        <Form.Input onChange={this.toggleSkill} name={skill} key={i} type="checkbox" label={skill} value={skill} checked={skills.includes(skill)} />)}
                                                 </Form.Group>
                                                 <Form.Group inline>
                                                     {allSkills.slice(Math.floor(allSkills.length / 3), Math.floor(allSkills.length / 3) * 2).map((skill, i) =>
-                                                        <Form.Input onChange={this.toggleSkill} name={skill} key={i} type="checkbox" label={skill} value={skill} checked={currentUser.skills.includes(skill) || skills.includes(skill)} />)}
+                                                        <Form.Input onChange={this.toggleSkill} name={skill} key={i} type="checkbox" label={skill} value={skill} checked={skills.includes(skill)} />)}
                                                 </Form.Group>
                                                 <Form.Group inline>
                                                     {allSkills.slice(Math.floor(allSkills.length / 3) * 2, allSkills.length).map((skill, i) =>
-                                                        <Form.Input onChange={this.toggleSkill} name={skill} key={i} type="checkbox" label={skill} value={skill} checked={currentUser.skills.includes(skill) || skills.includes(skill)} />)}
+                                                        <Form.Input onChange={this.toggleSkill} name={skill} key={i} type="checkbox" label={skill} value={skill} checked={skills.includes(skill)} />)}
                                                 </Form.Group>
                                             </Form>
                                         </Segment>
