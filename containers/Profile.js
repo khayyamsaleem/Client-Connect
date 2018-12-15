@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import LogoutButton from '~/components/LogoutButton'
-import { Grid, Header, Segment, Button, Label, Form, Icon, Responsive } from 'semantic-ui-react'
+import LocationInput from '~/components/LocationInput'
+import { Grid, Header, Segment, Button, Label, Form, Icon, Responsive, Dropdown } from 'semantic-ui-react'
 import '~/styles/App.scss'
-import { getCurrentUser, updateUser } from '~/utils/api/users'
+import { getCurrentUser } from '~/utils/api/users'
 import Router from 'next/router'
-import Geolookup from 'react-geolookup'
+
 
 export default class extends Component{
    constructor(props){
@@ -26,20 +27,15 @@ export default class extends Component{
         }
     }
 
-    handleLocationInputChange = e => { this.state.inputValue = e.target.value }
-    async handleLocationFormSubmit() {
-        await updateUser(this.state.currentUser.userName, "location", this.state.inputValue)
+    updateUser(newUser) { this.setState({currentUser: newUser}) }
+    getUser() { return this.state.currentUser }
+    handleClear() {
         let updatedUser = this.state.currentUser
-        updatedUser.location = this.state.inputValue
-        this.setState({currentUser: updatedUser})
-    }
-    handleLocationClear() {
-        let updatedUser = this.state.currentUser;
         updatedUser.location = null
         this.setState({currentUser: updatedUser})
     }
 
-    render(){
+    render() {
         return (
             <div className="profile-page">
                 { (!this.state.isLoading) ? (
@@ -69,16 +65,14 @@ export default class extends Component{
                                         this.state.currentUser.location ? 
                                         <Segment>
                                             <Label horizontal>Location</Label>
-                                            {this.state.currentUser.location}
-                                            <Button style={{marginLeft: 10}} content="Clear" size="mini" onClick={this.handleLocationClear.bind(this)}/>
+                                            <Segment>
+                                                {this.state.currentUser.location}
+                                                <Button style={{marginLeft: 10}} content="Clear" size="mini" onClick={this.handleClear.bind(this)}/>
+                                            </Segment>
                                         </Segment> :
-
                                         <Segment>
                                             <Label horizontal>Location</Label>
-                                            <Form onSubmit={this.handleLocationFormSubmit.bind(this)}>
-                                                <Form.Input placeholder="Location..." onChange={this.handleLocationInputChange.bind(this)}/>
-                                            </Form>
-                                            <Geolookup />
+                                            <LocationInput setUser={this.updateUser.bind(this)} getUser={this.getUser.bind(this)}/>
                                         </Segment>
                                     }
                                 </Segment.Group>
