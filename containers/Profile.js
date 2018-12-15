@@ -4,6 +4,7 @@ import { Grid, Header, Segment, Button, Label, Form, Icon, Responsive } from 'se
 import '~/styles/App.scss'
 import { getCurrentUser, updateUser } from '~/utils/api/users'
 import Router from 'next/router'
+import Geolookup from 'react-geolookup'
 
 export default class extends Component{
    constructor(props){
@@ -58,7 +59,7 @@ export default class extends Component{
                                     </Segment>
                                     <Segment>
                                         <Label horizontal>Account Type</Label>
-                                        {this.state.currentUser.userType}
+                                        {this.state.currentUser.userType}g
                                     </Segment>
                                     <Segment>
                                         <Label horizontal>Join Date</Label>
@@ -77,6 +78,7 @@ export default class extends Component{
                                             <Form onSubmit={this.handleLocationFormSubmit.bind(this)}>
                                                 <Form.Input placeholder="Location..." onChange={this.handleLocationInputChange.bind(this)}/>
                                             </Form>
+                                            <Geolookup />
                                         </Segment>
                                     }
                                 </Segment.Group>
