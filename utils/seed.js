@@ -1,5 +1,6 @@
 const fs = require('fs')
 const fetch = require('isomorphic-unfetch')
+const skills = require('./skills')
 const BASE_PATH = "/api/users"
 const getRootUrl = () => "http://localhost:5000"
 
@@ -36,8 +37,18 @@ function randomDate(date1, date2){
         return new Date(getRandomArbitrary(date2,date1)).toLocaleDateString()
     } else{
         return new Date(getRandomArbitrary(date1, date2)).toLocaleDateString()
-
     }
+}
+
+function getRandomSubarray(arr, size) {
+    var shuffled = arr.slice(0), i = arr.length, temp, index;
+    while (i--) {
+        index = Math.floor((i + 1) * Math.random());
+        temp = shuffled[index];
+        shuffled[index] = shuffled[i];
+        shuffled[i] = temp;
+    }
+    return shuffled.slice(0, size);
 }
 
 const seedDB = () => fs.readFile('./utils/users.txt', 'utf8', (err, data) => {
@@ -49,9 +60,10 @@ const seedDB = () => fs.readFile('./utils/users.txt', 'utf8', (err, data) => {
             lastName,
             userName: `${firstName.toLowerCase()}.${lastName.toLowerCase().replace(' ', '.')}`,
             email: `${firstName.toLowerCase()}.${lastName.replace(' ', '.').toLowerCase()}@clientconnect.tech`,
-            password: firstName,
+            password: firstName.trim().toLowerCase(),
             userType: (ind % 2 == 0) ? 'client' : 'freelancer',
-            joinDate: randomDate('1/1/2018', '11/25/2018')
+            joinDate: randomDate('1/1/2018', '11/25/2018'),
+            skills: getRandomSubarray(skills, Math.floor(Math.random()*skills.length))
         }
         const res = await seedUser(u)
         console.log(res)

@@ -15,7 +15,7 @@ router.post('/login', async (req, res) => {
         userSession.userId = u._id
         userSession.save((err, doc) => {
             if (err) {
-                console.log(err)
+                logger.error(err)
                 return res.status(500).json({ success: false, error: 'Server Error' })
             }
             return res.json({ success: true, message: "Logged In", token: doc._id })
@@ -28,24 +28,24 @@ router.get('/verify', async (req, res) => {
     UserSession.find({
         _id: token,
         isDeleted: false
-      }, (err, sessions) => {
+    }, (err, sessions) => {
         if (err) {
-          console.log(err);
-          return res.status(500).json({
-            success: false,
-            message: 'Error: Server error'
-          })
+            console.log(err);
+            return res.status(500).json({
+                success: false,
+                message: 'Error: Server error'
+            })
         }
         if (sessions.length != 1) {
-          return res.json({
-            success: false,
-            message: 'Error: Invalid token'
-          })
+            return res.json({
+                success: false,
+                message: 'Error: Invalid token'
+            })
         } else {
-          return res.json({
-            success: true,
-            message: 'TOKEN VERIFIED'
-          })
+            return res.json({
+                success: true,
+                message: 'TOKEN VERIFIED'
+            })
         }
     })
 })
@@ -53,11 +53,12 @@ router.get('/verify', async (req, res) => {
 router.get('/logout', async (req, res) => {
     const { token } = req.query
     UserSession.findOneAndUpdate({
-            _id: token,
-            isDeleted: false
-        }, {
-            $set: { isDeleted: true }
-        }, null, (err, sessions) => {
+        _id: token,
+        isDeleted: false
+    },
+    {
+        $set: { isDeleted: true }
+    }, null, (err, sessions) => {
         if (err) {
             console.log(err)
             return res.status(500).json({ error: err })
@@ -110,13 +111,21 @@ router.get('/get', async (req, res) => {
         const sess = await UserSession.findById(token)
         if (sess.isDeleted) {
             console.log("error, tried to fetch user for logged-out user")
-            return res.json({success: false, err : 'Not Logged In!'})
+            return res.json({ success: false, err: 'Not Logged In!' })
         }
         const currentUser = await User.findById(sess.userId)
-        res.json({ success: true, currentUser})
+        res.json({ success: true, currentUser })
     } catch (err) {
-        res.status(500).json({success: false, error: err.message || err.toString() })
+        res.status(500).json({ success: false, error: err.message || err.toString() })
     }
+})
+
+router.post('/update-skills', async (req, res) => {
+    const { userId, skills } = req.body
+    User.updateOne({ _id: userId }, { $set: { skills } }, (err, result) => {
+        if (err) throw err
+        res.json({ success: true, message: `Updated skills of user with userId ${userId}`, result })
+    })
 })
 
 module.exports = router
