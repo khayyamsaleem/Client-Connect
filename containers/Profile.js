@@ -14,7 +14,6 @@ import allSkills from '~/utils/skills'
 export default class extends Component {
     constructor(props) {
         super(props)
-        this.textinput = React.createRef()
         this.state = {
             currentUser: {},
             projects: [],
