@@ -39,6 +39,19 @@ router.get('/get', async (req, res) => {
     })
 })
 
+router.get('/toggle-complete', async (req, res) => {
+    const { projectId } = req.query
+    const project = await Project.findById(projectId)
+    project.complete = !project.complete
+    project.save(async (err) => {
+        if(err) {
+            res.status(500).json({success: false, err: err.message || err.toString()})
+        } else {
+            res.json({success: true, complete: project.complete})
+        }
+    })
+})
+
 router.post('/assign-freelancer-to-project', async (req, res) => {
     const { userId, projectId } = req.body
     const project = await Project.findById(projectId)

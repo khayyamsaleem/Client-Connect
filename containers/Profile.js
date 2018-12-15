@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Grid, Header, Segment, Label, Responsive, Form, Modal, Button } from 'semantic-ui-react'
+import { Grid, Header, Segment, Label, Responsive, Form, Modal, Button, Checkbox} from 'semantic-ui-react'
 import Router from 'next/router'
 
 import LogoutButton from '~/components/LogoutButton'
@@ -8,7 +8,7 @@ import AddProject from '~/components/AddProject'
 import LiveChat from '~/components/Chat'
 
 import { getCurrentUser, updateSkills, getUserById, updateUser } from '~/utils/api/users'
-import { getProjectsByUser } from '~/utils/api/projects'
+import { getProjectsByUser, toggleProjectCompletionStatus } from '~/utils/api/projects'
 import allSkills from '~/utils/skills'
 
 export default class extends Component {
@@ -88,6 +88,11 @@ export default class extends Component {
         this.setState({ownerForSelectedProj : owner.user})
     }
 
+    toggleProjectComplete = async (project) => {
+        const result = await toggleProjectCompletionStatus(project._id)
+        const { projects } = await getProjectsByUser(this.state.currentUser._id)
+        this.setState({projects})
+    }
 
     render() {
         const { projects, currentUser, skills, freelancerForSelectedProj, ownerForSelectedProj} = this.state
@@ -177,6 +182,12 @@ export default class extends Component {
                                                             {freelancerForSelectedProj.userName} </>
                                                             : <><Label horizontal>Project Owner</Label>{ownerForSelectedProj.userName}</>}
                                                         </Segment>
+                                                        {(currentUser.userType === 'client') ? (
+                                                            <Segment>
+                                                                <Label horizontal>Completed?</Label>
+                                                                <Checkbox checked={project.completed} onChange={() => {this.toggleProjectComplete(project)}}/>
+                                                            </Segment>
+                                                        ) : <div></div>}
                                                         <Segment.Group>
                                                             <Segment><Header as='h3'> Start Chatting</Header></Segment>
                                                             <Segment.Group>

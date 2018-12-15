@@ -15,3 +15,8 @@ export const assignFreelancerToProject = (userId, projectId) =>
     sendRequest(`${BASE_PATH}/assign-freelancer-to-project`, {
         body: JSON.stringify({userId, projectId})
     })
+
+export const toggleProjectCompletionStatus = (projectId) =>
+    sendRequest(`${BASE_PATH}/toggle-complete?projectId=${projectId}`, {
+        method: 'GET'
+    })

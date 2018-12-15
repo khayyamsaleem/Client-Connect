@@ -20,6 +20,11 @@ const projectSchema = new Schema({
     skills: {
         type: [String],
         default: []
+    },
+    complete: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 })
 
