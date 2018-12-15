@@ -17,6 +17,9 @@ export default class Navbar extends Component {
                     <Link href="/profile">
                         <Menu.Item as="a" content="Profile"></Menu.Item>
                     </Link>
+                    <Link href="/search">
+                        <Menu.Item as="a" content="Search"></Menu.Item>
+                    </Link>
                     <Menu.Item as="a" content="Logout" onClick={async () => {
                         const obj = getFromStorage('clientconnect')
                         if (obj && obj.token){
