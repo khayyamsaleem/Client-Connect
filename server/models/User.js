@@ -32,6 +32,10 @@ const userSchema = new Schema({
     joinDate: {
         type: Date,
         default: Date.now
+    },
+    projects: {
+        type: [Schema.Types.ObjectId],
+        default: []
     }
 })
 
@@ -59,7 +63,8 @@ class UserClass {
             userName,
             userType,
             password: hashedPassword,
-            joinDate
+            joinDate,
+            projects: []
         })
         return created
     }

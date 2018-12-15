@@ -15,7 +15,7 @@ router.post('/login', async (req, res) => {
         userSession.userId = u._id
         userSession.save((err, doc) => {
             if (err) {
-                console.log(err)
+                logger.error(err)
                 return res.status(500).json({ success: false, error: 'Server Error' })
             }
             return res.json({ success: true, message: "Logged In", token: doc._id })

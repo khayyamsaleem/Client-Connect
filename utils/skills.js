@@ -1,0 +1,22 @@
+export default [
+    "HTML",
+    "CSS",
+    "React",
+    "Express",
+    "Design",
+    "Docker",
+    "Deployment",
+    "Mockups",
+    "Video Editing",
+    "Javascript",
+    "C++",
+    "Java",
+    "3D Modeling",
+    "Systems Programming",
+    "Systems Design",
+    "Vue",
+    "Redis",
+    "SQL",
+    "NoSQL",
+    "Machine Learning"
+]

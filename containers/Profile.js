@@ -3,13 +3,16 @@ import LogoutButton from '~/components/LogoutButton'
 import { Grid, Header, Segment, Label, Icon, Responsive } from 'semantic-ui-react'
 import '~/styles/App.scss'
 import { getCurrentUser } from '~/utils/api/users'
+import { getProjectsByUser } from '~/utils/api/projects'
 import Router from 'next/router'
+import AddProject from '~/components/AddProject'
 
 export default class extends Component{
    constructor(props){
         super(props)
         this.state = {
             currentUser: '',
+            projects: [],
             isLoading: true
         }
     }
@@ -19,11 +22,17 @@ export default class extends Component{
         if (!userObj.success){
             Router.push('/login')
         } else {
-            this.setState({currentUser: userObj.currentUser, isLoading: false})
+            const { projects } = await getProjectsByUser(userObj.currentUser._id)
+            this.setState({
+                currentUser: userObj.currentUser,
+                isLoading: false,
+                projects: projects
+            })
         }
     }
 
     render(){
+        const { projects } = this.state
         return (
             <div className="profile-page">
                 { (!this.state.isLoading) ? (
@@ -56,11 +65,22 @@ export default class extends Component{
                             <Segment.Group id="forceSameSegmentHeight">
                                 <Segment><Header as='h3' content="Projects" /></Segment>
                                 <Segment.Group>
-                                    <Segment textAlign="center">
-                                        <Icon name="plus square outline" size="huge"/>
-                                    </Segment>
-                                    <Segment textAlign="center">Add a New Project!</Segment>
+                                {projects.map((project, i) => {
+                                    return (
+                                        <Segment.Group key={i}>
+                                            <Segment>
+                                                <Label horizontal>Title</Label>
+                                                {project.title}
+                                            </Segment>
+                                            <Segment>
+                                                <Label horizontal>Description</Label>
+                                                {project.description}
+                                            </Segment>
+                                        </Segment.Group>
+                                    )
+                                })}
                                 </Segment.Group>
+                                <AddProject currentuser={this.state.currentUser}/>
                             </Segment.Group>
                         </Grid.Column>
                     </Grid.Row>
