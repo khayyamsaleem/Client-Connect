@@ -71,8 +71,8 @@ nextApp.prepare().then(() => {
     const io = require('socket.io').listen(server)
 
     
-    var redis = require('node-redis')
-    var redisClient = redis.createClient()
+    const redis = require('node-redis')
+    const redisClient = redis.createClient()
 
     redisClient.on('connect', function() {
         console.log('Redis client connected');
