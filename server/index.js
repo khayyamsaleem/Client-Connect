@@ -18,11 +18,13 @@ const api = require('./api')
 const MONGO_URL = dev ? process.env.MONGO_URL_TEST : process.env.MONGO_URL
 const ROOT_URL = dev ? `http://localhost:${PORT}` : process.env.PROD_URL
 
+
 const options = {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
 }
+
 
 mongoose.connect(
   MONGO_URL,

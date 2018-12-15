@@ -32,12 +32,19 @@ const userSchema = new Schema({
     joinDate: {
         type: Date,
         default: Date.now
+    },
+    location: String,
+    skills: {
+        type: [String],
+        required: () => {
+            return this.userType === 'freelancer'
+        }
     }
 })
 
 class UserClass {
     static publicFields() {
-        return ['id', 'firstName', 'middleName', 'lastName', 'userName', 'email', 'userType']
+        return ['id', 'firstName', 'middleName', 'lastName', 'userName', 'email', 'userType', 'location', 'skills']
     }
 
     static async userExists(query){
@@ -79,6 +86,13 @@ class UserClass {
                 ],
             },
             UserClass.publicFields().join(' '),
+        )
+    }
+
+    static async updateField(user, field, newValue) {
+        return await this.updateOne(
+            {'_id': user.id},
+            {$set: {[field]: newValue}}
         )
     }
 

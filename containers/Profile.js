@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import LogoutButton from '~/components/LogoutButton'
-import { Grid, Header, Segment, Label, Icon, Responsive } from 'semantic-ui-react'
+import { Grid, Header, Segment, Label, Form, Icon, Responsive } from 'semantic-ui-react'
 import '~/styles/App.scss'
-import { getCurrentUser } from '~/utils/api/users'
+import { getCurrentUser, updateUser } from '~/utils/api/users'
 import Router from 'next/router'
 
 export default class extends Component{
    constructor(props){
         super(props)
+        this.textinput = React.createRef()
         this.state = {
             currentUser: '',
             isLoading: true
@@ -16,11 +17,20 @@ export default class extends Component{
 
     async componentDidMount(){
         const userObj = await getCurrentUser()
+
         if (!userObj.success){
             Router.push('/login')
         } else {
             this.setState({currentUser: userObj.currentUser, isLoading: false})
         }
+    }
+
+    handleLocationInputChange = e => { this.state.inputValue = e.target.value }
+    async handleLocationFormSubmit() {
+        await updateUser(this.state.currentUser.userName, "location", this.state.inputValue)
+        let updatedUser = this.state.currentUser
+        updatedUser.location = this.state.inputValue
+        this.setState({currentUser: updatedUser})
     }
 
     render(){
@@ -49,6 +59,20 @@ export default class extends Component{
                                         <Label horizontal>Join Date</Label>
                                         {new Date(this.state.currentUser.joinDate).toLocaleDateString('en-US')}
                                     </Segment>
+                                    {
+                                        this.state.currentUser.location ? 
+                                        <Segment>
+                                            <Label horizontal>Location</Label>
+                                            {this.state.currentUser.location}
+                                        </Segment> :
+
+                                        <Segment>
+                                            <Label horizontal>Location</Label>
+                                            <Form onSubmit={this.handleLocationFormSubmit.bind(this)}>
+                                                <Form.Input placeholder="Location..." onChange={this.handleLocationInputChange.bind(this)}/>
+                                            </Form>
+                                        </Segment>
+                                    }
                                 </Segment.Group>
                             </Segment.Group>
                         </Grid.Column>
