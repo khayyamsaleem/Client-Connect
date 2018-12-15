@@ -32,6 +32,11 @@ export const verifyToken = (token) =>
         method: 'GET'
     })
 
+export const getFreelancersBySkills = (skills) =>
+    sendRequest(`${BASE_PATH}/get-freelancers-by-skills`, {
+        body: JSON.stringify({skills})
+    })
+
 
 export const getCurrentUser = () => {
     const tokenObj = getFromStorage('clientconnect')
@@ -44,6 +49,11 @@ export const getCurrentUser = () => {
         return {error: 'Not Logged In'}
     }
 }
+
+export const getUserById = (userId) =>
+    sendRequest(`${BASE_PATH}/getById?userId=${userId}`, {
+        method: 'GET'
+    })
 
 export const updateSkills = (userId, skills) =>
     sendRequest(`${BASE_PATH}/update-skills`, {

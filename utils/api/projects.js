@@ -11,3 +11,7 @@ export const getProjectsByUser = (userId) =>
         method: 'GET'
     })
 
+export const assignFreelancerToProject = (userId, projectId) =>
+    sendRequest(`${BASE_PATH}/assign-freelancer-to-project`, {
+        body: JSON.stringify({userId, projectId})
+    })

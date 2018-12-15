@@ -16,6 +16,10 @@ const projectSchema = new Schema({
     },
     freelancer: {
         type: Schema.Types.ObjectId
+    },
+    skills: {
+        type: [String],
+        default: []
     }
 })
 

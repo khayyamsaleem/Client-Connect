@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import LogoutButton from '~/components/LogoutButton'
-import { Grid, Header, Segment, Label, Responsive, Form, Button } from 'semantic-ui-react'
+import { Grid, Header, Segment, Label, Responsive, Form, Modal } from 'semantic-ui-react'
 import '~/styles/App.scss'
-import { getCurrentUser, updateSkills } from '~/utils/api/users'
+import { getCurrentUser, updateSkills, getUserById } from '~/utils/api/users'
 import { getProjectsByUser } from '~/utils/api/projects'
 import Router from 'next/router'
 import AddProject from '~/components/AddProject'
+import LiveChat from '~/components/Chat'
 import allSkills from '~/utils/skills'
-import LiveChat from '~/components/chat'
 
 export default class extends Component {
     constructor(props) {
@@ -16,7 +16,9 @@ export default class extends Component {
             currentUser: {},
             projects: [],
             isLoading: true,
-            skills: []
+            skills: [],
+            freelancerForSelectedProj: {},
+            ownerForSelectedProj: {}
         }
     }
 
@@ -30,16 +32,14 @@ export default class extends Component {
                 currentUser: userObj.currentUser,
                 isLoading: false,
                 projects: projects,
-                skills: userObj.currentUser.skills
+                skills: userObj.currentUser.skills,
             })
         }
     }
 
-    updateSkills = async (e) => {
-        e.preventDefault()
+    updateSkills = async () => {
         const { skills, currentUser } = this.state
-        const result = await updateSkills(currentUser._id, skills)
-        console.log(result)
+        await updateSkills(currentUser._id, skills)
     }
 
     toggleSkill = async (e) => {
@@ -55,14 +55,30 @@ export default class extends Component {
             currentUser.skills = skills
             this.setState({ skills, currentUser })
         }
+        this.updateSkills()
     }
 
+    getMembersForSelectedProj = async (freelancerId, ownerId) => {
+        if (freelancerId) {
+            const freelancer = await getUserById(freelancerId)
+            this.setState({freelancerForSelectedProj : freelancer.user})
+        }
+        const owner = await getUserById(ownerId)
+        this.setState({ownerForSelectedProj : owner.user})
+    }
+
+    getOwnerForProj = async (userId) => {
+        const owner = await getUserById(userId)
+        this.setState({ownerForSelectedProj : owner.user})
+    }
+
+
     render() {
-        const { projects, currentUser, skills } = this.state
+        const { projects, currentUser, skills, freelancerForSelectedProj, ownerForSelectedProj} = this.state
         return (
             <div className="profile-page">
                 {(!this.state.isLoading) ? (
-                    <Responsive as={Grid} verticalAlign="middle" style={{ width: '60%', height: '60%' }} id="profileGrid" padded>
+                    <Responsive as={Grid} verticalAlign="middle" style={{ width: '80%', height: '60%' }} id="profileGrid" padded>
                         <Grid.Row columns={2}>
                             <Grid.Column width={6}>
                                 <Segment.Group id="forceSameSegmentHeight">
@@ -99,7 +115,8 @@ export default class extends Component {
                                     <Segment.Group>
                                         {(projects.length > 0) ? projects.map((project, i) => {
                                             return (
-                                                <Segment.Group key={i}>
+                                                <Modal key={i} trigger={
+                                                <Segment.Group onClick={() => this.getMembersForSelectedProj(project.freelancer, project.owner)} style={{backgroundColor: (project.freelancer ? 'lightblue' : '')}}>
                                                     <Segment>
                                                         <Label horizontal>Title</Label>
                                                         {project.title}
@@ -108,7 +125,42 @@ export default class extends Component {
                                                         <Label horizontal>Description</Label>
                                                         {project.description}
                                                     </Segment>
-                                                </Segment.Group>
+                                                </Segment.Group>}>
+                                                    <Segment.Group>
+                                                        <Segment>
+                                                            <Label horizontal>Title</Label>
+                                                            {project.title}
+                                                        </Segment>
+                                                        <Segment>
+                                                            <Label horizontal>Description</Label>
+                                                            {project.description}
+                                                        </Segment>
+                                                        <Segment>
+                                                            <Label horizontal>Required Skills</Label>
+                                                            {project.skills.join(", ")}
+                                                        </Segment>
+                                                        {(project.freelancer) ?
+                                                        <>
+                                                        <Segment>
+                                                            {(currentUser.userType === 'freelancer') ? <>
+                                                            <Label horizontal>Assigned To</Label>
+                                                            {freelancerForSelectedProj.userName} </>
+                                                            : <><Label horizontal>Project Owner</Label>{ownerForSelectedProj.userName}</>}
+                                                        </Segment>
+                                                        <Segment.Group>
+                                                            <Segment><Header as='h3'> Start Chatting</Header></Segment>
+                                                            <Segment.Group>
+                                                                <Segment>
+                                                                    {currentUser.userType === 'freelancer' ? 
+                                                                        <LiveChat currentuser={currentUser} recipient={ownerForSelectedProj}/> :
+                                                                        <LiveChat currentuser={currentUser} recipient={freelancerForSelectedProj}/>}
+                                                                </Segment>
+                                                            </Segment.Group>
+                                                        </Segment.Group>
+                                                        </>
+                                                        : <div></div>}
+                                                    </Segment.Group>
+                                                </Modal>
                                             )
                                         }) : <Segment textAlign="center"><Header as="h4" content="None Yet!" /></Segment>}
                                     </Segment.Group>
@@ -137,14 +189,11 @@ export default class extends Component {
                                                 </Form.Group>
                                             </Form>
                                         </Segment>
-                                        <Segment textAlign="center">
-                                            <Button onClick={this.updateSkills} type="submit">Update Skills</Button>
-                                        </Segment>
                                     </Segment.Group>
                                 </Grid.Column>
                             </Grid.Row>
                         )}
-                        <Grid.Row>
+                        {/* <Grid.Row>
                             <Grid.Column width={16} style={{ top: 20 }}>
                                 <Segment.Group id="forceSameSegmentHeight">
                                     <Segment><Header as='h3'> Start Chatting</Header></Segment>
@@ -155,7 +204,7 @@ export default class extends Component {
                                     </Segment.Group>
                                 </Segment.Group>
                             </Grid.Column>
-                        </Grid.Row>
+                        </Grid.Row> */}
                         <Grid.Row textAlign="center">
                             <Grid.Column>
                                 <LogoutButton />

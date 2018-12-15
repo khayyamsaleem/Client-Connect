@@ -23,6 +23,21 @@ router.post('/login', async (req, res) => {
     }
 })
 
+router.get('/getById', async (req, res) => {
+    const { userId } = req.query
+    const user = await User.findById(userId)
+    res.json({user})
+})
+
+router.post('/get-freelancers-by-skills', async (req, res) => {
+    const { skills } = req.body
+    const freelancers = await User.find({ userType: 'freelancer'})
+    const candidates = freelancers.filter( f => {
+        return skills.every(val => f.skills.includes(val))
+    })
+    res.json({success: true, candidates})
+})
+
 router.get('/verify', async (req, res) => {
     const { token } = req.query
     UserSession.find({

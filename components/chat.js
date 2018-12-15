@@ -4,13 +4,13 @@ import io from "socket.io-client";
 import { Grid, Form, Segment, Button, Message } from 'semantic-ui-react'
 import getRootUrl from '~/utils/getRootUrl'
 
-export default class Login extends Component {
+export default class Chat extends Component {
 
     constructor(props) {
         super(props);
         //state created when user submits message form
         this.state = {
-            to: '',
+            to: props.recipient.userName,
             from: props.currentuser.userName,
             message: '',
             messages: [],
@@ -66,7 +66,7 @@ export default class Login extends Component {
     // calls sendMessage when form is sumbitted, updates state with value entered
     // div 'messages' loops through the state's messages array and prints the to our page
     render() {
-        const { messages, err, to, message } = this.state
+        const { messages, err, message } = this.state
         return (
             <div className="chat-form">
                 <Grid textAlign='center' style={{ height: '100%' }} verticalAlign="middle">
@@ -74,7 +74,7 @@ export default class Login extends Component {
                         <div className='messages'>
                             {messages.map((m, i) => {
                                 return (
-                                    <div style={{ color: (i % 2 == 0) ? 'green' : 'blue' }}>{m.from}: {m.message}</div>
+                                    <div style={{ color: (m.from === this.state.from) ? 'green' : 'blue' }}>{m.from}: {m.message}</div>
                                 )
                             })}
                         </div>
@@ -84,9 +84,6 @@ export default class Login extends Component {
 
                             <Form size='large' error={err.exists} onSubmit={this.sendMessage}>
                                 <Segment stacked>
-                                    <Form.Input name='to' placeholder={`Receiver: ${(this.props.currentuser.userType === 'client') ? 'Freelancer' : 'Client'}'s Username`}
-                                        value={to}
-                                        onChange={ev => this.setState({ to: ev.target.value })} />
                                     <Form.Input name='message' placeholder="Message..."
                                         value={message}
                                         onChange={ev => this.setState({ message: ev.target.value })}

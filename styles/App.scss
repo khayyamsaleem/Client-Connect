@@ -28,6 +28,12 @@ body > div > div > div.chat-form {
     height: 100%;
 }
 
+body > div,
+body > div > div,
+body > div > div > div.search-page {
+    height: 100%;
+}
+
 #profileGrid {
     margin: 0 auto !important;
     margin-top: 80px !important;

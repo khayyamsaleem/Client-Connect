@@ -39,4 +39,25 @@ router.get('/get', async (req, res) => {
     })
 })
 
+router.post('/assign-freelancer-to-project', async (req, res) => {
+    const { userId, projectId } = req.body
+    const project = await Project.findById(projectId)
+    const user = await User.findById(userId)
+    project.freelancer = user._id
+    project.save(async (err) => {
+        if (err) {
+            res.status(500).json({success: false, err: err.message || err.toString()})
+        } else {
+            user.projects.push(projectId)
+            user.save(async (err) => {
+                if (err) {
+                    res.status(500).json({success: false, err: err.message || err.toString()})
+                } else {
+                    res.json({success: true, message: 'added Freelancer to project'})
+                }
+            })
+        }
+    })
+})
+
 module.exports = router

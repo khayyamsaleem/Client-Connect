@@ -17,12 +17,13 @@ export default class AddProject extends Component {
     handleOpen = () => this.setState({ modalOpen: true })
     handleClose = () => this.setState({ modalOpen: false })
 
-    handleSubmit = (e) => {
+    handleSubmit = async (e) => {
         e.preventDefault()
         const { title, description, skills } = this.state
         const currentUser = this.props.currentuser
-        addProject({title, description, skills, currentUser})
+        await addProject({title, description, skills, currentUser})
         this.setState({modalOpen: false})
+        window.location.reload()
     }
     handleChange = (e, {name, value}) => {
         if (name === "requirements"){

@@ -3,6 +3,6 @@ import Search from '~/containers/Search'
 
 export default () => (
     <App>
-
+        <Search />
     </App>
 )
