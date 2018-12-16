@@ -8,7 +8,7 @@ import Router from 'next/router'
 export default class Navbar extends Component {
     render() {
         return (
-            <Menu fixed="top" secondary>
+            <Menu style={{backgroundColor: 'white', borderBottom: '2px solid lightgray', marginBottom: '10px'}} fixed="top" secondary>
                 <Link href='/'>
                     <Menu.Item header as="h2">Client Connect</Menu.Item>
                 </Link>
