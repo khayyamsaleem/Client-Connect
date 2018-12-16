@@ -101,19 +101,18 @@ nextApp.prepare().then(() => {
 
     // object to hold users connected to socket.io
     const users = {}
-    username = ''
-    reciever = ''
+    let username = ''
+    let receiver = ''
 
     // message history to cache in redis, array of message objects
-    msgHist = []
 
     io.on('connection', function (client) {
         let socketid = client.id
+        let msgHist = []
 
         client.on('SEND_MESSAGE', async function (data) {
             curr_user = data.from
             curr_rcvr = data.to
-
             // loop through username from socket data, build new string to save usernames and their socket id
             let temp1 = ''
             for(var i = 0; i < curr_user.length; i++){
@@ -124,18 +123,16 @@ nextApp.prepare().then(() => {
             temp1 = ''
             delete users['']
 
-            console.log(users)
             dataHist = data.message
             msgHist.push(dataHist)
         
-            io.emit('RECIEVE_MESSAGE', data)
+            io.emit('RECEIVE_MESSAGE', data)
         })
 
         client.on('disconnect', function() {
             //remove user from active list of user when they disconnect (any time they leave profile page)
             delete users[username]
-            console.log('User disconnected')
-            console.log(msgHist)
+            console.log("DISCONNECTED")
 
             //stringify message history to cache in redis
             msgHist = JSON.stringify(msgHist)

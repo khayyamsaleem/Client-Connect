@@ -122,11 +122,11 @@ export default class extends Component {
                                             {new Date(currentUser.joinDate).toLocaleDateString('en-US')}
                                         </Segment>
                                         {
-                                            this.state.currentUser.location ? 
+                                            currentUser.location ? 
                                             <Segment>
                                                 <Label horizontal>Location</Label>
                                                 <Segment>
-                                                    {this.state.currentUser.location.display_name}
+                                                    {currentUser.location.display_name}
                                                     <Button style={{marginLeft: 10}} content="Clear" size="mini" onClick={this.handleClear.bind(this)}/>
                                                 </Segment>
                                             </Segment> :
@@ -177,7 +177,7 @@ export default class extends Component {
                                                         {(project.freelancer) ?
                                                         <>
                                                         <Segment>
-                                                            {(currentUser.userType === 'freelancer') ? <>
+                                                            {(currentUser.userType === 'client') ? <>
                                                             <Label horizontal>Assigned To</Label>
                                                             {freelancerForSelectedProj.userName} </>
                                                             : <><Label horizontal>Project Owner</Label>{ownerForSelectedProj.userName}</>}
@@ -189,7 +189,7 @@ export default class extends Component {
                                                             </Segment>
                                                         ) : <div></div>}
                                                         <Segment.Group>
-                                                            <Segment><Header as='h3'> Start Chatting</Header></Segment>
+                                                            <Segment><Header as='h3'>Start Chatting</Header></Segment>
                                                             <Segment.Group>
                                                                 <Segment>
                                                                     {currentUser.userType === 'freelancer' ? 
