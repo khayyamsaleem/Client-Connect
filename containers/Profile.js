@@ -9,6 +9,7 @@ import LiveChat from '~/components/Chat'
 
 import { getCurrentUser, updateSkills, getUserById, updateUser } from '~/utils/api/users'
 import { getProjectsByUser, toggleProjectCompletionStatus } from '~/utils/api/projects'
+import { joinRoom } from '~/utils/api/chat'
 import allSkills from '~/utils/skills'
 
 export default class extends Component {
@@ -78,6 +79,9 @@ export default class extends Component {
         if (freelancerId) {
             const freelancer = await getUserById(freelancerId)
             this.setState({freelancerForSelectedProj : freelancer.user})
+            //send post request to /api/messages/user
+            console.log("ATTEMPTING TO JOIN ROOM AS " + this.state.currentUser.userName)
+            await joinRoom(this.state.currentUser.userName)
         }
         const owner = await getUserById(ownerId)
         this.setState({ownerForSelectedProj : owner.user})
@@ -161,6 +165,7 @@ export default class extends Component {
                                                         {project.description}
                                                     </Segment>
                                                 </Segment.Group>}>
+                                                    <Modal.Content>
                                                     <Segment.Group>
                                                         <Segment>
                                                             <Label horizontal>Title</Label>
@@ -201,6 +206,7 @@ export default class extends Component {
                                                         </>
                                                         : <div></div>}
                                                     </Segment.Group>
+                                                    </Modal.Content>
                                                 </Modal>
                                             )
                                         }) : <Segment textAlign="center"><Header as="h4" content="None Yet!" /></Segment>}

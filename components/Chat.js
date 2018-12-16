@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { checkExists } from '~/utils/api/users'
 import io from "socket.io-client"
 import { Grid, Form, Segment, Button, Message } from 'semantic-ui-react'
+
+import { getMessageHistory, getActiveUsers, sendMessageAndUser, leaveRoom } from '~/utils/api/chat'
 import getRootUrl from '~/utils/getRootUrl'
 
 export default class Chat extends Component {
@@ -14,54 +15,61 @@ export default class Chat extends Component {
         this.state = {
             message: '',
             messages: [],
-            err: { exists: false, header: '', msg: '' },
-            timeLog: new Date().toLocaleString(),
-            rooms: []
+            activeUsers: [],
+            err: { exists: false, header: '', msg: '' }
         };
     }
 
     componentDidMount = async () => {
-        this.socket = io(getRootUrl());
+        this.socket = io();
         // after socket SEND_MESSAGE data recieved from server, RECIEVE_MESSAGE is called
         // adds sent message's current state to the messages array
-        const addMessage = data => {
-            this.setState({ messages: [...this.state.messages, data] })
-        }
-        this.socket.on('RECEIVE_MESSAGE', function (data) {
-            addMessage(data)
+
+        const { messages } = await getMessageHistory()
+        this.setState({
+            messages: messages
+                                .map(o => JSON.parse(o))
+                                .filter(
+                                    m => m.user === this.props.currentuser.userName || m.user === this.props.recipient.userName
+                                )
         })
+        const { users } = await getActiveUsers()
+        this.setState({ activeUsers: users })
+        this.socket.on('message', data => {
+            console.log("RECEIVED MESSAGE: ", data)
+            if (data.user !== 'system') {
+                this.setState({
+                    messages: [...this.state.messages, data]
+                })
+            }
+        })
+        this.socket.on('users', data => {
+            console.log("SOCKET RECEIVED DATA (users)", users)
+            this.setState({activeUsers: data})
+        })
+    }
+
+    componentWillUnmount = async () => {
+        const result = await leaveRoom(this.props.currentuser.userName)
     }
 
     // send a message from user form to server
     sendMessage = async ev => {
         ev.preventDefault()
-        const { message, timeLog } = this.state
-        const userExists = await checkExists(this.props.currentuser.userName)
-
-        // check if username exists 
-        if (userExists.exists === false) {
-            this.setState({ err: { exists: true, header: "No Such User!", msg: "Ensure your username is typed correctly" } })
-            return
-        }
-
-        if (this.state.message === '') {
-            this.setState({ err: { exists: true, header: "Please Provide a Message!", msg: "" } })
-            return
-        }
-        else {
-            this.setState({ err: { exists: false, header: "", msg: "" } })
-        }
-
-        // socket emits message 
-        this.socket.emit('SEND_MESSAGE', {
-            to: this.props.recipient.userName,
-            from: this.props.currentuser.userName,
+        const { message } = this.state
+        const timestamp = Date.now()
+        const user = this.props.currentuser.userName
+        const payload = {
             message,
-            timeLog
-        });
-
-        // clear message sent from state
-        this.setState({ message: '' });
+            user,
+            timestamp
+        }
+        this.socket.emit('message', payload)
+        const response = await sendMessageAndUser(payload)
+        this.setState({
+            messages: [...this.state.messages, payload]
+        })
+        this.setState({message: ''})
     };
 
     // calls sendMessage when form is sumbitted, updates state with value entered
@@ -75,7 +83,8 @@ export default class Chat extends Component {
                         <div className='messages'>
                             {messages.map((m, i) => {
                                 return (
-                                    <div key={i} style={{ color: (m.from === this.props.currentuser.userName) ? 'green' : 'blue' }}>{m.from}: {m.message}</div>
+                                    <div key={i} style={{ 
+                                        color: (m.user === this.props.currentuser.userName) ? 'green' : (m.user === 'system') ? 'red': 'blue' }}>{m.user}: {m.message}</div>
                                 )
                             })}
                         </div>

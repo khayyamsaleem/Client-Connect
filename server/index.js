@@ -10,13 +10,12 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const mongoSessionStore = require('connect-mongo')
 const mongoose = require('mongoose')
-const redis = require('redis')
 
 const logger = require('./logs')
 const api = require('./api')
+const redisClient = require('./redisClientLib')
 
 const MONGO_URL = dev ? process.env.MONGO_URL_TEST : process.env.MONGO_URL
-const REDIS_URL = process.env.REDIS_URL || `http://localhost:6379`
 const ROOT_URL = dev ? `http://localhost:${PORT}` : process.env.PROD_URL
 
 
@@ -34,7 +33,7 @@ mongoose.connect(
 
 const sessionSecret = process.env.SESSION_SECRET
 
-nextApp.prepare().then(() => {
+nextApp.prepare().then(async () => {
     const app = require('express')()
     app.use(bodyParser.json())
     app.use(bodyParser.urlencoded({ extended : true }))
@@ -69,76 +68,21 @@ nextApp.prepare().then(() => {
         return handle(req, res)
     })
     server = app.listen(PORT, () => logger.info(`server running @ ${ROOT_URL}`))
-
+    const rc = await redisClient()
 
     const io = require('socket.io').listen(server)
 
-    
-    const redisClient = redis.createClient(REDIS_URL)
-
-
-    //check redis conn
-    redisClient.on('connect', function() {
-        console.log('Redis client connected');
-    });
-
-    // error if Redis conn fails
-    redisClient.on("error", function (err) {
-        console.log("Error " + err);
-    });
-    
-    
-    // redis test function
-    redisClient.set('my test key', 'my test value', redis.print);
-    redisClient.get('my test key', function (error, result) {
-        if (error) {
-            console.log(error);
-            throw error;
-        }
-        console.log('GET result ->' + result);
-    });
-    
-
-    // object to hold users connected to socket.io
-    const users = {}
-    let username = ''
-    let receiver = ''
-
     // message history to cache in redis, array of message objects
 
-    io.on('connection', function (client) {
-        let socketid = client.id
-        let msgHist = []
-
-        client.on('SEND_MESSAGE', async function (data) {
-            curr_user = data.from
-            curr_rcvr = data.to
-            // loop through username from socket data, build new string to save usernames and their socket id
-            let temp1 = ''
-            for(var i = 0; i < curr_user.length; i++){
-                temp1 += curr_user[i]
+    io.on('connection', socket => {
+        rc.subscribe('chatMessages')
+        rc.subscribe('activeUsers')
+        rc.on('message', (chan, msg) => {
+            if (chan === 'chatMessages') {
+                io.emit('message', JSON.parse(msg))
+            } else {
+                io.emit('users', JSON.parse(msg))
             }
-            username = temp1
-            users[username] = socketid
-            temp1 = ''
-            delete users['']
-
-            dataHist = data.message
-            msgHist.push(dataHist)
-        
-            io.emit('RECEIVE_MESSAGE', data)
-        })
-
-        client.on('disconnect', function() {
-            //remove user from active list of user when they disconnect (any time they leave profile page)
-            delete users[username]
-            console.log("DISCONNECTED")
-
-            //stringify message history to cache in redis
-            msgHist = JSON.stringify(msgHist)
-            redisClient.set("Chat:History", msgHist, redis.print);
-            
- 
         })
     })
 

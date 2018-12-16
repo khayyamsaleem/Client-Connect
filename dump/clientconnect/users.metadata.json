@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"clientconnect.users"},{"v":2,"unique":true,"key":{"userName":1},"name":"userName_1","ns":"clientconnect.users","background":true}],"uuid":"68cfe6f8a30741599ae99eb65d5fdf02"}
