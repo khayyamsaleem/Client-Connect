@@ -21,7 +21,7 @@ export default class Chat extends Component {
     }
 
     componentDidMount = async () => {
-        this.socket = io();
+        this.socket = io(getRootUrl());
         // after socket SEND_MESSAGE data recieved from server, RECIEVE_MESSAGE is called
         // adds sent message's current state to the messages array
 
