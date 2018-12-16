@@ -4,6 +4,7 @@ import ProjectList from '~/components/ProjectList'
 import { getCurrentUser, getFreelancersBySkills } from '~/utils/api/users'
 import { assignFreelancerToProject } from '~/utils/api/projects'
 import Router from 'next/router'
+import { haversineDistance } from '~/utils/haversine.js';
 
 export default class Search extends Component{
     constructor(props){
@@ -24,6 +25,28 @@ export default class Search extends Component{
     selectProject = async (project) => {
         this.setState({selectedProject: project})
         const { candidates } = await getFreelancersBySkills(project.skills)
+        const { currentUser } = this.state
+
+        if (currentUser.hasOwnProperty("location") && currentUser.location) {
+            const { lat: lat1, lon: lon1 } = this.state.currentUser.location;
+
+            for (let candidate of candidates) {
+                if (!candidate.hasOwnProperty("location")) {
+                    candidate.distance = -1
+                    continue
+                }
+                const { lat: lat2, lon: lon2 } = candidate.location
+
+                candidate.distance = haversineDistance(lat1, lon1, lat2, lon2)
+            }
+
+            candidates.sort((a, b) => {
+                if (b.distance == -1) return -1
+                if (a.distance == -1) return 1
+                else return a.distance - b.distance
+            });
+        }
+
         this.setState({candidates})
     }
     selectFreelancer = async (selectedFreelancer) => {
@@ -33,7 +56,8 @@ export default class Search extends Component{
         Router.push('/profile')
     }
     render(){
-        const { candidates } = this.state
+        const { candidates, currentUser } = this.state
+        
         return (
             <div className="search-page" style={{width: '60%'}} id="profileGrid">
                 <Grid>
@@ -62,6 +86,12 @@ export default class Search extends Component{
                                         <Segment textAlign="center">
                                             <Button onClick={() => this.selectFreelancer(boi)}>Select this Freelancer</Button>
                                         </Segment>
+                                        {currentUser.hasOwnProperty("location") && currentUser.location ?
+                                            <Segment>
+                                                <Label horizontal>Distance</Label>
+                                                {boi.distance === -1 ? "No location specified" : (`${boi.distance.toFixed(2)}km`)}
+                                            </Segment>
+                                            : <div></div>}
                                     </Segment.Group>
                             )}
                         </Segment.Group>
