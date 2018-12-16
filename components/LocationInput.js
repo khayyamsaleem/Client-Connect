@@ -38,9 +38,9 @@ export default class extends Component {
     handleDropdownSelect(e, value) {
         this.setState({selected: this.state.optionsVerbose[value.value-1]})
     }
-    handleKeyDown(e) {
+    handleKeyDown = (e) => {
         if (e.keyCode == 13) {
-            geocodeInput()
+            this.geocodeInput()
         }
     }
 

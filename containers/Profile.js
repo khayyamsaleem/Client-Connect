@@ -54,7 +54,7 @@ export default class extends Component {
 
 
     updateSkills = async (e) => {
-        e.preventDefault()
+        if(e) e.preventDefault()
         const { skills, currentUser } = this.state
         await updateSkills(currentUser._id, skills)
     }
