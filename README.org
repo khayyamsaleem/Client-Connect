@@ -6,6 +6,8 @@
 
 * Group Members
 - Khayyam Saleem, Michael Iacona, Maxwell Melo, Annie Topoleski
+  
+* [[https://www.youtube.com/watch?v=xrswrNRgohs][Demo Video]]
 
 * Getting Started
 ** Setup
