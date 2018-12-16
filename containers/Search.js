@@ -25,8 +25,10 @@ export default class Search extends Component{
     selectProject = async (project) => {
         this.setState({selectedProject: project})
         const { candidates } = await getFreelancersBySkills(project.skills)
+        const { currentUser } = this.state
 
-        if (this.state.currentUser.hasOwnProperty("location")) {
+        if (currentUser.hasOwnProperty("location") && currentUser.location) {
+            console.log(currentUser.location)
             const { lat: lat1, lon: lon1 } = this.state.currentUser.location;
 
             for (let candidate of candidates) {
@@ -55,7 +57,7 @@ export default class Search extends Component{
         Router.push('/profile')
     }
     render(){
-        const { candidates } = this.state
+        const { candidates, currentUser } = this.state
         
         return (
             <div className="search-page" style={{width: '60%'}} id="profileGrid">
@@ -85,10 +87,12 @@ export default class Search extends Component{
                                         <Segment textAlign="center">
                                             <Button onClick={() => this.selectFreelancer(boi)}>Select this Freelancer</Button>
                                         </Segment>
-                                        <Segment>
-                                            <Label horizontal>Distance</Label>
-                                            {boi.distance === -1 ? "No location specified" : (`${boi.distance.toFixed(2)}km`)}
-                                        </Segment>
+                                        {currentUser.hasOwnProperty("location") && currentUser.location ?
+                                            <Segment>
+                                                <Label horizontal>Distance</Label>
+                                                {boi.distance === -1 ? "No location specified" : (`${boi.distance.toFixed(2)}km`)}
+                                            </Segment>
+                                            : <div></div>}
                                     </Segment.Group>
                             )}
                         </Segment.Group>
