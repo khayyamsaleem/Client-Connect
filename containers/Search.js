@@ -52,7 +52,6 @@ export default class Search extends Component{
     selectFreelancer = async (selectedFreelancer) => {
         const { selectedProject } = this.state
         const result = await assignFreelancerToProject(selectedFreelancer._id, selectedProject._id)
-        console.log(result)
         Router.push('/profile')
     }
     render(){
@@ -83,15 +82,15 @@ export default class Search extends Component{
                                             <Label horizontal>Skills</Label>
                                             {boi.skills.join(", ")}
                                         </Segment>
-                                        <Segment textAlign="center">
-                                            <Button onClick={() => this.selectFreelancer(boi)}>Select this Freelancer</Button>
-                                        </Segment>
                                         {currentUser.hasOwnProperty("location") && currentUser.location ?
                                             <Segment>
                                                 <Label horizontal>Distance</Label>
                                                 {boi.distance === -1 ? "No location specified" : (`${boi.distance.toFixed(2)}km`)}
                                             </Segment>
                                             : <div></div>}
+                                        <Segment textAlign="center">
+                                            <Button onClick={() => this.selectFreelancer(boi)}>Select this Freelancer</Button>
+                                        </Segment>
                                     </Segment.Group>
                             )}
                         </Segment.Group>
