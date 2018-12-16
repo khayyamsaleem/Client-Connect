@@ -28,7 +28,6 @@ export default class Search extends Component{
         const { currentUser } = this.state
 
         if (currentUser.hasOwnProperty("location") && currentUser.location) {
-            console.log(currentUser.location)
             const { lat: lat1, lon: lon1 } = this.state.currentUser.location;
 
             for (let candidate of candidates) {
